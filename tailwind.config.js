@@ -1,4 +1,3 @@
-import type { Config } from "tailwindcss";
 
 module.exports = {
   content: [
@@ -20,4 +19,4 @@ module.exports = {
     },
   },
   plugins: [],
-} satisfies Config;
+};

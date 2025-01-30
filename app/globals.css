@@ -1,21 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', sans-serif;
+  background-color: theme('colors.light');
+  color: theme('colors.dark');
+}
+
+h1, h2, h3 {
+  font-weight: 600;
+  color: theme('colors.primary');
+}
+
+p {
+  color: theme('colors.dark');
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 2rem;
+}
+
+.button {
+  background: #047857;
+  color: white;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: 400;
+}
+
+.button:hover {
+  background: #065F46;
+  transform: translateY(-2px);
 }
