@@ -42,7 +42,7 @@ export default function Contact() {
         <div className="grid md:grid-cols-3 gap-8 text-center mb-12">
           <div>
             <h3 className="text-xl font-semibold">📧 Email</h3>
-            <p className="text-gray-600">info@simpatico.com</p>
+            <p className="text-gray-600">carldgillis1@gmail.com</p>
           </div>
           <div>
             <h3 className="text-xl font-semibold">📞 Phone</h3>

@@ -1,32 +1,58 @@
 import { NextResponse } from "next/server";
+import { connectDB } from "@/lib/mongodb";
+import Inquiry from "@/models/Inquiry";
 import nodemailer from "nodemailer";
 
+// Connect to MongoDB
 export async function POST(req: Request) {
-  try {
-    const { name, email, subject, message } = await req.json();
+  await connectDB();
 
+  try {
+    // Extract form data
+    const { name, email, message } = await req.json();
+
+    // Validate input fields
     if (!name || !email || !message) {
-      return NextResponse.json({ success: false, message: "All fields are required." }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: "All fields are required." },
+        { status: 400 }
+      );
     }
 
+    // Save inquiry to MongoDB
+    const inquiry = new Inquiry({ name, email, message });
+    await inquiry.save();
+
+    // Configure Nodemailer transporter
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {
-        user: process.env.EMAIL_USER, // Set this in your .env file
-        pass: process.env.EMAIL_PASS, // Set this in your .env file
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
-    await transporter.sendMail({
-      from: email,
-      to: process.env.EMAIL_USER,
-      subject: subject || "New Contact Form Submission",
-      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
-    });
+    // Email settings
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_RECEIVER, // The admin receiving the contact form submission
+      subject: `New Contact Form Submission from ${name}`,
+      text: `You received a new contact form submission:\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}`,
+    };
 
-    return NextResponse.json({ success: true, message: "Message sent successfully!" });
+    // Send email
+    await transporter.sendMail(mailOptions);
+
+    // Response success message
+    return NextResponse.json({
+      success: true,
+      message: "Message successfully sent & stored in database!",
+    });
   } catch (error) {
-    console.error("Error sending email:", error);
-    return NextResponse.json({ success: false, message: "Error sending message." }, { status: 500 });
+    console.error("Error handling contact form submission:", error);
+    return NextResponse.json(
+      { success: false, message: "Server error. Please try again later." },
+      { status: 500 }
+    );
   }
 }
