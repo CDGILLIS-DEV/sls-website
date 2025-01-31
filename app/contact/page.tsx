@@ -49,8 +49,8 @@ export default function Contact() {
             <p className="text-gray-600">+1 314 629 3352</p>
           </div>
           <div>
-            <h3 className="text-xl font-semibold">📍 Address</h3>
-            <p className="text-gray-600">123 Simpatico Blvd, St. Louis, MO</p>
+            <h3 className="text-xl font-semibold">📍 Office Location</h3>
+            <p className="text-gray-600">Bethlehem, GA  30620</p>
           </div>
         </div>
   
