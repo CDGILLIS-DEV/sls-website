@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 
 
@@ -42,11 +43,11 @@ export default function Contact() {
         <div className="grid md:grid-cols-3 gap-8 text-center mb-12">
           <div>
             <h3 className="text-xl font-semibold">📧 Email</h3>
-            <p className="text-gray-600">carldgillis1@gmail.com</p>
+            <a href="mailto:carldgillis1@gmail.com" className="text-gray-600">carldgillis1@gmail.com</p>
           </div>
           <div>
             <h3 className="text-xl font-semibold">📞 Phone</h3>
-            <p className="text-gray-600">+1 314 629 3352</p>
+            <a href="tel:+13146293352" className="text-gray-600">+1 314 629 3352</p>
           </div>
           <div>
             <h3 className="text-xl font-semibold">📍 Office Location</h3>
