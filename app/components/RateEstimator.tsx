@@ -94,3 +94,4 @@ return (
     </div>
   );
 };
+export default RateEstimator;

@@ -47,6 +47,9 @@ const Navbar = () => {
           <Link href="/contact" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white">
             Contact
           </Link>
+          <Link href="/rate-estimator" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white">
+            Rate Estimator
+          </Link>
         </div>
       )}
     </nav>
