@@ -10,7 +10,7 @@ const Navbar = () => {
   return (
     <nav className="bg-white shadow-md fixed w-full top-0 left-0 z-50">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <Link href="/" className="text-primary text-2xl font-serif">
+        <Link href="/" className="text-primary text-2xl font-serif font-extralight">
           Simpatico Logistics Services
         </Link>
         <div className="hidden md:flex space-x-6">
