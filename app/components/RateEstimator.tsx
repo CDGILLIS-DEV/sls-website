@@ -22,12 +22,12 @@ const handleSubmit = (e: React.FormEvent) => {
     // Rate Calculation
     const baseRate = 50; // Flat fee
     const costPerMile = 1.9; // $1.90 per mile
-    const costPerPound = 0.05; // $0.05 per pound
+    const costPerPound = 0.01; // $0.01 per pound
 
     const distance = parseFloat(formData.distance);
     const weight = parseFloat(formData.weight);
 
-    const estimaedRate = baseRate + costPerMile + distance + costPerPound * weight;
+    const estimaedRate = baseRate + costPerMile * distance + costPerPound * weight;
 
     setRate(estimaedRate);
 };

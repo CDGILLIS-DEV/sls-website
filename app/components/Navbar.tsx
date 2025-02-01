@@ -26,6 +26,9 @@ const Navbar = () => {
           <Link href="/contact" className="text-dark hover:text-primary transition-all">
             Contact
           </Link>
+          <Link href="/rate-estimator" className="text-dark hover:text-primary transition-all">
+            Rate Estimator
+          </Link>
         </div>
         <div className="md:hidden">
           <button onClick={() => setIsOpen(!isOpen)}>
