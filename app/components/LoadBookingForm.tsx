@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const LoadBookingForm = () => {
+    const router = useRouter();
     const [formData, setFormData] = useState({
         companyName: "",
         contactName: "",
@@ -32,20 +34,9 @@ const handleSubmit = async (e: React.FormEvent) => {
     const data = await res.json();
 
     if (data.success) {
-        setSuccessMessage("Load booking submitted successfully!");
-        setFormData({
-            companyName: "",
-            contactName: "",
-            email: "",
-            phone: "",
-            pickupLocation: "",
-            dropoffLocation: "",
-            pickupDate: "",
-            deliveryDate: "",
-            loadDescription: "",
-        });
+        router.push(`/booking-confirmation?ref=${data.bookinReference}`);
     } else {
-        setSuccessMessage("Error submitting the booking. Please try again.");
+        alert("Error submitting the booking. Please try again.");
     }
  };
 

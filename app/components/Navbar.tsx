@@ -29,6 +29,9 @@ const Navbar = () => {
           <Link href="/rate-estimator" className="text-dark hover:text-primary transition-all">
             Rate Estimator
           </Link>
+          <Link href="/book-load" className="text-dark hover:text-primary transition-all">
+            Book Load
+          </Link>
         </div>
         <div className="md:hidden">
           <button onClick={() => setIsOpen(!isOpen)}>
@@ -52,6 +55,9 @@ const Navbar = () => {
           </Link>
           <Link href="/rate-estimator" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white">
             Rate Estimator
+          </Link>
+          <Link href="/book-load" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white">
+            Book Load
           </Link>
         </div>
       )}
