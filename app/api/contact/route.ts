@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongodb";
+import { connectToDatabase } from "@/lib/mongodb";
 import Inquiry from "@/models/Inquiry";
 import nodemailer from "nodemailer";
 
 // Connect to MongoDB
 export async function POST(req: Request) {
-  await connectDB();
+  await connectToDatabase();
 
   try {
     // Extract form data

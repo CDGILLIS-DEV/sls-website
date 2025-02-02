@@ -1,19 +1,11 @@
-"use client";
 import mongoose from "mongoose";
 
 const LoadBookingSchema = new mongoose.Schema({
-    companyName: "",
-    contactName: "",
-    email: "",
-    phone: "",
-    pickupLocation: "",
-    dropoffLocation: "",
-    pickupDate: "",
-    deliveryDate: "",
-    loadDescription: "",
-    createdAt: { type: Date, default: Date.now },
-});
+  shipperName: String,
+  contactEmail: String,
+  pickupLocation: String,
+  deliveryLocation: String,
+  freightDetails: String,
+}, { timestamps: true });
 
-const LoadBooking = mongoose.models.LoadBooking || mongoose.model("LoadBooking", LoadBookingSchema);
-
-export default LoadBooking;
+export default mongoose.models.LoadBooking || mongoose.model("LoadBooking", LoadBookingSchema);
