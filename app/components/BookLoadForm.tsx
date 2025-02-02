@@ -89,7 +89,7 @@ const BookLoadForm = () => {
             value={formData.email}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder="Email Address"
+            placeholder=""
             required
           />
         </div>
@@ -102,7 +102,7 @@ const BookLoadForm = () => {
             value={formData.pickup}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder="Pickup Location"
+            placeholder=""
             required
           />
         </div>
@@ -115,7 +115,7 @@ const BookLoadForm = () => {
             value={formData.dropoff}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder="Drop-off Location"
+            placeholder=""
             required
           />
         </div>
