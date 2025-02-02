@@ -8,4 +8,6 @@ const LoadBookingSchema = new mongoose.Schema({
   freightDetails: String,
 }, { timestamps: true });
 
-export default mongoose.models.LoadBooking || mongoose.model("LoadBooking", LoadBookingSchema);
+ const LoadBooking =  mongoose.models.LoadBooking || mongoose.model("LoadBooking", LoadBookingSchema);
+
+ export default LoadBooking;
