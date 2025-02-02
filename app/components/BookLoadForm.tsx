@@ -1,14 +1,19 @@
-"use client";
-import { useState } from "react";
+'use client';
+
+import { useState } from 'react';
 
 const BookLoadForm = () => {
   const [formData, setFormData] = useState({
-    shipperName: "",
-    contactEmail: "",
-    pickupLocation: "",
-    deliveryLocation: "",
-    freightDetails: "",
+    company: '',
+    email: '',
+    pickup: '',
+    dropoff: '',
+    description: '',
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -16,29 +21,129 @@ const BookLoadForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setSuccessMessage('');
+    setErrorMessage('');
+
     try {
-      const response = await fetch("/api/book-load", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/book-load', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
-      const result = await response.json();
-      alert(result.message);
+      if (response.ok) {
+        setSuccessMessage('Booking submitted successfully!');
+        setFormData({
+          company: '',
+          email: '',
+          pickup: '',
+          dropoff: '',
+          description: '',
+        });
+      } else {
+        throw new Error('Failed to submit booking.');
+      }
     } catch (error) {
-      console.error("Submission error:", error);
+      console.error(error);
+      setErrorMessage('Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <input type="text" name="shipperName" placeholder="Shipper Name" value={formData.shipperName} onChange={handleChange} required />
-      <input type="email" name="contactEmail" placeholder="Contact Email" value={formData.contactEmail} onChange={handleChange} required />
-      <input type="text" name="pickupLocation" placeholder="Pickup Location" value={formData.pickupLocation} onChange={handleChange} required />
-      <input type="text" name="deliveryLocation" placeholder="Delivery Location" value={formData.deliveryLocation} onChange={handleChange} required />
-      <textarea name="freightDetails" placeholder="Freight Details" value={formData.freightDetails} onChange={handleChange} required />
-      <button type="submit" className="bg-primary text-white px-4 py-2 rounded">Submit Booking</button>
-    </form>
+    <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-md">
+      <h1 className="text-2xl font-bold text-center mb-4">Book Your Load</h1>
+
+      {successMessage && (
+        <div className="mb-4 p-2 text-green-600 bg-green-100 border border-green-400 rounded">
+          {successMessage}
+        </div>
+      )}
+      {errorMessage && (
+        <div className="mb-4 p-2 text-red-600 bg-red-100 border border-red-400 rounded">
+          {errorMessage}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Company Name</label>
+          <input
+            type="text"
+            name="company"
+            value={formData.company}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="Company Name"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Email</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="Email Address"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Pickup Location</label>
+          <input
+            type="text"
+            name="pickup"
+            value={formData.pickup}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="Pickup Location"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Drop-off Location</label>
+          <input
+            type="text"
+            name="dropoff"
+            value={formData.dropoff}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="Drop-off Location"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Load Description</label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            rows={4}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="Describe the load (e.g., weight, dimensions)"
+            required
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className={`w-full py-2 rounded-md text-white font-semibold transition duration-300 ${
+            isSubmitting ? 'bg-gray-400' : 'bg-green-600 hover:bg-green-700'
+          }`}
+        >
+          {isSubmitting ? 'Submitting...' : 'Submit Booking'}
+        </button>
+      </form>
+    </div>
   );
 };
 
