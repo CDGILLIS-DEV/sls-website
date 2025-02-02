@@ -76,7 +76,7 @@ const BookLoadForm = () => {
             value={formData.company}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder="Company Name"
+            placeholder=""
             required
           />
         </div>
