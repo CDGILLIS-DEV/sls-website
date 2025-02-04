@@ -1,13 +1,13 @@
-import mongoose from "mongoose";
+import { ObjectId } from "mongodb";
 
-const LoadBookingSchema = new mongoose.Schema({
-  shipperName: String,
-  contactEmail: String,
-  pickupLocation: String,
-  deliveryLocation: String,
-  freightDetails: String,
-}, { timestamps: true });
-
- const LoadBooking =  mongoose.models.LoadBooking || mongoose.model("LoadBooking", LoadBookingSchema);
+interface LoadBooking {
+    _id?: ObjectId;
+    companyName: string;
+    email: string;
+    pickupLocation: string;
+    dropoffLocation: string;
+    freightDetails: string;
+    createdAt?: Date;
+}
 
  export default LoadBooking;

@@ -4,11 +4,11 @@ import { useState } from 'react';
 
 const BookLoadForm = () => {
   const [formData, setFormData] = useState({
-    company: '',
+    companyName: '',
     email: '',
-    pickup: '',
-    dropoff: '',
-    description: '',
+    pickupLocation: '',
+    dropoffLocation: '',
+    freightDetails: '',
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,11 +35,11 @@ const BookLoadForm = () => {
       if (response.ok) {
         setSuccessMessage('Booking submitted successfully!');
         setFormData({
-          company: '',
-          email: '',
-          pickup: '',
-          dropoff: '',
-          description: '',
+          companyName: "",
+          email: "",
+          pickupLocation: "",
+          dropoffLocation: "",
+          freightDetails: "",
         });
       } else {
         throw new Error('Failed to submit booking.');
@@ -73,7 +73,7 @@ const BookLoadForm = () => {
           <input
             type="text"
             name="company"
-            value={formData.company}
+            value={formData.companyName}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
             placeholder=""
@@ -99,7 +99,7 @@ const BookLoadForm = () => {
           <input
             type="text"
             name="pickup"
-            value={formData.pickup}
+            value={formData.pickupLocation}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
             placeholder=""
@@ -112,7 +112,7 @@ const BookLoadForm = () => {
           <input
             type="text"
             name="dropoff"
-            value={formData.dropoff}
+            value={formData.dropoffLocation}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
             placeholder=""
@@ -124,7 +124,7 @@ const BookLoadForm = () => {
           <label className="block text-sm font-medium text-gray-700">Load Description</label>
           <textarea
             name="description"
-            value={formData.description}
+            value={formData.freightDetails}
             onChange={handleChange}
             rows={4}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
