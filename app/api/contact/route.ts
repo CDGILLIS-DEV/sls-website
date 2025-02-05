@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { run } from '@/lib/mongodb';
+import run  from '@/lib/mongodb';
 import Inquiry from '@/models/Inquiry';
 import nodemailer from 'nodemailer';
 

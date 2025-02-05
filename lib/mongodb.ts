@@ -1,5 +1,3 @@
-import { data } from "autoprefixer";
-
 const { MongoClient} = require('mongodb');
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -29,5 +27,5 @@ async function run() {
     // Ensures that the client will close when you finish/error
         await client.close();
     }
-       
+
 export default run ;
