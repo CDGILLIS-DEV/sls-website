@@ -13,7 +13,7 @@ async function run() {
     const dbName  = "";
     const collectionName = "";
 
-    // Send a ping to confirm a successful connection
+     // Create references to the database and collection in order to run operations on them.
     const database = client.db(dbName);
     const collection = database.collection(collectionName);
 

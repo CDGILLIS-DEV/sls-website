@@ -10,4 +10,4 @@ interface LoadBooking {
     createdAt?: Date;
 }
 
- export default LoadBooking;
+ export default  LoadBooking ;

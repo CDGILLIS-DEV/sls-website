@@ -18,12 +18,11 @@ export async function POST(req: Request) {
 
     await run();
 
-    const inquiry = ({
+    const inquiry: Inquiry = ({
       name,
       email,
       subject,
       message,
-      createdAt: new Date(),
     });
 
     const transporter = nodemailer.createTransport({

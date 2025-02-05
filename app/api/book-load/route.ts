@@ -17,7 +17,7 @@ export async function POST(req: Request) {
 
     await run();
 
-    const booking = {
+    const booking: LoadBooking = {
       companyName,
       email,
       pickupLocation,
