@@ -24,6 +24,7 @@ export async function POST(req: Request) {
       dropoffLocation,
       freightDetails,
     };
+    
 
     const transporter = nodemailer.createTransport({
       service: 'Gmail',
