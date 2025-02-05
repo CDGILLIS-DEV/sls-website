@@ -1,31 +1,27 @@
-const { MongoClient} = require('mongodb');
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = process.env.MONGOD_URI;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
 
 async function run() {
-    const uri = process.env.MONGODB_URI;
-
-    const client = new MongoClient(uri)
-
+  try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
-
-    const dbName  = "";
-    const collectionName = "";
-
-     // Create references to the database and collection in order to run operations on them.
-    const database = client.db(dbName);
-    const collection = database.collection(collectionName);
-
-    const result  = "";
-    try {
-        const insertResult = await collection.insert(result);
-        console.log(`${insertResult.insertedCount} documents successfully inserted.\n`);
-      } catch (err) {
-        console.error(`Something went wrong trying to insert the new documents: ${err}\n`);
-      }
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
     // Ensures that the client will close when you finish/error
-        await client.close();
-    }
+    await client.close();
+  }
+}
+run().catch(console.dir);
 
 export default run ;
