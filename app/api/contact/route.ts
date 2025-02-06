@@ -25,6 +25,8 @@ export async function POST(req: Request) {
       message,
     });
 
+    console.log("Confirmed", inquiry);
+
     const transporter = nodemailer.createTransport({
       service: 'Gmail',
       auth: {
