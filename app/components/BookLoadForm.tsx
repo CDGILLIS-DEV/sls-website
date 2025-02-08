@@ -26,7 +26,7 @@ const BookLoadForm = () => {
     setErrorMessage('');
 
     try {
-      const response = await fetch('/api/book-load', {
+      const response = await fetch('/api/book-load/route.ts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
