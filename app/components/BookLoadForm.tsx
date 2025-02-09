@@ -10,11 +10,6 @@ const BookLoadForm = () => {
     freightDetails: '',
   });
 
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -24,9 +19,6 @@ const BookLoadForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setSuccessMessage('');
-    setErrorMessage('');
     setLoading(true);
     setMessage("")
 
@@ -52,6 +44,7 @@ const BookLoadForm = () => {
       }
     } catch (error) {
       setMessage("An error occurred. Please try again.");
+      console.log(error)
     } finally {
       setLoading(false)
     }
