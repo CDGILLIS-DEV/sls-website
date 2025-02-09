@@ -26,7 +26,7 @@ const BookLoadForm = () => {
     setErrorMessage('');
 
     try {
-      const response = await fetch('/api/book-load/route.ts', {
+      const response = await fetch('/api/book-load', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -72,7 +72,7 @@ const BookLoadForm = () => {
           <label className="block text-sm font-medium text-gray-700">Company Name</label>
           <input
             type="text"
-            name="company"
+            name="companyName"
             value={formData.companyName}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -98,7 +98,7 @@ const BookLoadForm = () => {
           <label className="block text-sm font-medium text-gray-700">Pickup Location</label>
           <input
             type="text"
-            name="pickup"
+            name="pickupLocation"
             value={formData.pickupLocation}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -111,7 +111,7 @@ const BookLoadForm = () => {
           <label className="block text-sm font-medium text-gray-700">Drop-off Location</label>
           <input
             type="text"
-            name="dropoff"
+            name="dropoffLocation"
             value={formData.dropoffLocation}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -123,7 +123,7 @@ const BookLoadForm = () => {
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">Load Description</label>
           <textarea
-            name="description"
+            name="freightDetails"
             value={formData.freightDetails}
             onChange={handleChange}
             rows={4}

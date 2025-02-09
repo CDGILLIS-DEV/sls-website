@@ -5,6 +5,7 @@ export async function POST(req: Request) {
   try {
     const data = await req.json();
     const client = await connectToDatabase();
+    console.log("Connected to: ", client)
     const db = client.db('sls-website'); // Ensure the DB name matches
 
     await db.collection('bookings').insertOne(data);
