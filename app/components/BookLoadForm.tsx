@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 
 const BookLoadForm = () => {
@@ -11,19 +10,25 @@ const BookLoadForm = () => {
     freightDetails: '',
   });
 
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSuccessMessage('');
     setErrorMessage('');
+    setLoading(true);
+    setMessage("")
 
     try {
       const response = await fetch('/api/book-load', {
@@ -32,8 +37,9 @@ const BookLoadForm = () => {
         body: JSON.stringify(formData),
       });
 
+      const result = await response.json();
       if (response.ok) {
-        setSuccessMessage('Booking submitted successfully!');
+        setMessage("Booking submitted successfully!");
         setFormData({
           companyName: "",
           email: "",
@@ -42,108 +48,78 @@ const BookLoadForm = () => {
           freightDetails: "",
         });
       } else {
-        throw new Error('Failed to submit booking.');
+        setMessage(result.message);
       }
     } catch (error) {
-      console.error(error);
-      setErrorMessage('Something went wrong. Please try again.');
+      setMessage("An error occurred. Please try again.");
     } finally {
-      setIsSubmitting(false);
+      setLoading(false)
     }
-  };
+  }; 
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-md">
-      <h1 className="text-2xl font-bold text-center mb-4">Book Your Load</h1>
+    <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-4 bg-white shadow-md rounded-md">
+      <h2 className="text-xl font-semibold text-center mb-4">Book a Load</h2>
 
-      {successMessage && (
-        <div className="mb-4 p-2 text-green-600 bg-green-100 border border-green-400 rounded">
-          {successMessage}
-        </div>
-      )}
-      {errorMessage && (
-        <div className="mb-4 p-2 text-red-600 bg-red-100 border border-red-400 rounded">
-          {errorMessage}
-        </div>
-      )}
+      <input
+        type="text"
+        name="companyName"
+        value={formData.companyName}
+        onChange={handleChange}
+        placeholder="Company Name"
+        required
+        className="w-full p-2 border border-gray-300 rounded mb-2"
+      />
 
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Company Name</label>
-          <input
-            type="text"
-            name="companyName"
-            value={formData.companyName}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder=""
-            required
-          />
-        </div>
+      <input
+        type="email"
+        name="email"
+        value={formData.email}
+        onChange={handleChange}
+        placeholder="Email"
+        required
+        className="w-full p-2 border border-gray-300 rounded mb-2"
+      />
 
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder=""
-            required
-          />
-        </div>
+      <input
+        type="text"
+        name="pickupLocation"
+        value={formData.pickupLocation}
+        onChange={handleChange}
+        placeholder="Pickup Location"
+        required
+        className="w-full p-2 border border-gray-300 rounded mb-2"
+      />
 
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Pickup Location</label>
-          <input
-            type="text"
-            name="pickupLocation"
-            value={formData.pickupLocation}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder=""
-            required
-          />
-        </div>
+      <input
+        type="text"
+        name="dropoffLocation"
+        value={formData.dropoffLocation}
+        onChange={handleChange}
+        placeholder="Dropoff Location"
+        required
+        className="w-full p-2 border border-gray-300 rounded mb-2"
+      />
 
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Drop-off Location</label>
-          <input
-            type="text"
-            name="dropoffLocation"
-            value={formData.dropoffLocation}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder=""
-            required
-          />
-        </div>
+      <textarea
+        name="freightDetails"
+        value={formData.freightDetails}
+        onChange={handleChange}
+        placeholder="Freight Details"
+        required
+        className="w-full p-2 border border-gray-300 rounded mb-2"
+      />
 
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Load Description</label>
-          <textarea
-            name="freightDetails"
-            value={formData.freightDetails}
-            onChange={handleChange}
-            rows={4}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder="Describe the load (e.g., weight, dimensions)"
-            required
-          ></textarea>
-        </div>
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700"
+      >
+        {loading ? "Submitting..." : "Submit Booking"}
+      </button>
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className={`w-full py-2 rounded-md text-white font-semibold transition duration-300 ${
-            isSubmitting ? 'bg-gray-400' : 'bg-green-600 hover:bg-green-700'
-          }`}
-        >
-          {isSubmitting ? 'Submitting...' : 'Submit Booking'}
-        </button>
-      </form>
-    </div>
+      {message && <p className="text-center mt-2 text-sm text-gray-600">{message}</p>}
+    </form>
   );
 };
 

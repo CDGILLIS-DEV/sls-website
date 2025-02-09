@@ -6,16 +6,6 @@ if (!uri) {
   throw new Error('Please define the MONGODB_URI environment variable.');
 }
 
-  const client = new MongoClient(uri, {
-    serverApi: {
-      version: ServerApiVersion.v1,
-      strict: true,
-      deprecationErrors: true,
-    },
-    tls: true,
-    tlsAllowInvalidCertificates: true,    
-  });
-
   let cachedClient: MongoClient | null = null;
 
   async function connectToDatabase() {
@@ -24,8 +14,19 @@ if (!uri) {
     }
   
    try { 
+    const client = new MongoClient(uri, {
+        serverApi: {
+          version: ServerApiVersion.v1,
+          strict: true,
+          deprecationErrors: true,
+        },
+        tls: true,
+        tlsAllowInvalidCertificates: true,    
+      });
+
     await client.connect();
     console.log("Successfully connected to MongoDB!");
+    
     cachedClient = client;
     return client;
    } catch (error) {
