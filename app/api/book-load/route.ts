@@ -43,7 +43,7 @@ export async function POST(req: Request) {
         { status: 200}
         );   
    } catch(error) {
-     console.error("Error processing bookin:", error);
+     console.error("Error processing booking:", error);
      return NextResponse.json(
         { success: false, message: "Internal server error" },
      );   
