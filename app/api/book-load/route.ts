@@ -14,12 +14,13 @@ export async function POST(req: Request) {
             { status: 400 }
         );
     }
-    
+    console.log("***********All Fields Were Filled Properly***********")
     // connect to MongoDB
     await connectToDatabase();
 
     // save to MongoDB
     const newBooking = new LoadBooking(data);
+    console.log("*************", newBooking, "***************")    
     await newBooking.save();
 
     const transporter = nodemailer.createTransport({
@@ -28,7 +29,7 @@ export async function POST(req: Request) {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS,
         },
-    });
+    });   
 
     await transporter.sendMail({
         to: data.email,
@@ -46,6 +47,6 @@ export async function POST(req: Request) {
      console.error("Error processing booking:", error);
      return NextResponse.json(
         { success: false, message: "Internal server error" },
-     );   
+     { status: 500 });   
    }
 }

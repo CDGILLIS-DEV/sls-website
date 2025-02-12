@@ -1,6 +1,6 @@
 import mongoose,{ Schema, Document } from "mongoose";
 
-export interface ILoadBooking extends Document {
+export interface LoadBooking extends Document {
     companyName: string;
     email: string;
     pickupLocation: string;
@@ -9,7 +9,7 @@ export interface ILoadBooking extends Document {
     createdAt?: Date;
 }
 
-const LoadBookingSchema = new Schema<ILoadBooking>({
+const LoadBookingSchema = new Schema<LoadBooking>({
     companyName: { type: String, required: true },
     email: { type: String, required: true },
     pickupLocation: { type: String, required: true },
@@ -18,4 +18,4 @@ const LoadBookingSchema = new Schema<ILoadBooking>({
     createdAt: { type: Date, default: Date.now },
 })
 
- export default  mongoose.models.LoadBooking || mongoose.model<ILoadBooking>("LoadBooking", LoadBookingSchema);
+ export default  mongoose.models.LoadBooking || mongoose.model<LoadBooking>("LoadBooking", LoadBookingSchema);

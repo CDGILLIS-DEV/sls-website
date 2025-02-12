@@ -1,38 +1,52 @@
-import { MongoClient, ServerApiVersion } from 'mongodb';
+/* eslint-disable */
+import { MongoClient, ServerApiVersion } from "mongodb";
 
-const uri = process.env.MONGODB_URI!;
-
-if (!uri) {
-  throw new Error('Please define the MONGODB_URI environment variable.');
+if (!process.env.MONGODB_URI) {
+  throw new Error("Please define the MONGODB_URI environment variable inside .env.local");
 }
 
-  let cachedClient: MongoClient | null = null;
+const MONGODB_URI: string = process.env.MONGODB_URI;
 
-  async function connectToDatabase() {
-    if (cachedClient) {
-      return cachedClient;
-    }
-  
-   try { 
-    const client = new MongoClient(uri, {
-        serverApi: {
-          version: ServerApiVersion.v1,
-          strict: true,
-          deprecationErrors: true,
-        },
-        tls: true,
-        tlsAllowInvalidCertificates: true,    
-      });
+// Define a global variable type
+interface GlobalMongo {
+  conn: MongoClient | null;
+  promise: Promise<MongoClient> | null;
+}
 
-    await client.connect();
-    console.log("Successfully connected to MongoDB!");
-    
-    cachedClient = client;
-    return client;
-   } catch (error) {
-    console.error("MongoDB connection error:", error);
-    throw error;
-   }
+// Ensure TypeScript understands the global variable
+declare global {
+  var _mongoClient: GlobalMongo | undefined;
+}
+
+// Use `const` instead of `var`
+const cached: GlobalMongo = global._mongoClient ?? { conn: null, promise: null };
+
+if (!cached.conn) {
+  global._mongoClient = cached;
+}
+
+async function connectToDatabase(): Promise<MongoClient> {
+  if (cached.conn) {
+    console.log("Using existing MongoDB connection.");
+    return cached.conn;
+  }
+
+  if (!cached.promise) {
+    console.log("Creating new MongoDB connection...");
+    cached.promise = new MongoClient(MONGODB_URI, {
+      serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+      },
+      connectTimeoutMS: 30000,
+      socketTimeoutMS: 45000,
+    }).connect();
+  }
+
+  cached.conn = await cached.promise;
+  console.log("Connected to MongoDB!");
+  return cached.conn;
 }
 
 export default connectToDatabase;
