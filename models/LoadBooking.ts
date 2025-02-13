@@ -1,6 +1,7 @@
-import mongoose,{ Schema, Document } from "mongoose";
+import mongoose,{ Schema, Document, ObjectId } from "mongoose";
 
 export interface LoadBooking extends Document {
+    _id: ObjectId
     companyName: string;
     email: string;
     pickupLocation: string;

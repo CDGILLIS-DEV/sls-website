@@ -40,8 +40,6 @@ async function connectToDatabase(): Promise<MongoClient> {
         strict: true,
         deprecationErrors: true,
       },
-      connectTimeoutMS: 30000, // 30 seconds timeout
-      socketTimeoutMS: 45000, // 45 seconds socket timeout
     }).connect();
     console.log("*********************", cached.promise, "********************")
   }

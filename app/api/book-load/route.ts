@@ -11,6 +11,7 @@ export async function POST(req: Request) {
 
     const data = await req.json();
     const result = await collection.insertOne(data);
+
     // validate required data
     if (!data.companyName || !data.email || !data.pickupLocation || !data.dropoffLocation || !data.freightDetails) {
         return NextResponse.json(
@@ -20,6 +21,7 @@ export async function POST(req: Request) {
     }
     console.log("***********All Fields Were Filled Properly***********")
     // connect to MongoDB
+    await connectToDatabase();
 
     // save to MongoDB
     const newBooking = new LoadBooking(data);
@@ -43,7 +45,7 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(
-        { success: true, result },
+        { success: true, result},
         { status: 200}
         );   
    } catch(error) {
