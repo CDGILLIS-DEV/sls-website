@@ -43,7 +43,7 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(
-        { success: true, message: "Booking saved and email sent." },
+        { success: true, result },
         { status: 200}
         );   
    } catch(error) {
