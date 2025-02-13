@@ -6,6 +6,7 @@ if (!process.env.MONGODB_URI) {
 }
 
 const MONGODB_URI: string = process.env.MONGODB_URI;
+const MONDODB_DB_NAME = process.env.MONGODB_DB_NAME;
 
 // Define a global variable type
 interface GlobalMongo {
@@ -39,14 +40,17 @@ async function connectToDatabase(): Promise<MongoClient> {
         strict: true,
         deprecationErrors: true,
       },
-      connectTimeoutMS: 30000,
-      socketTimeoutMS: 45000,
+      connectTimeoutMS: 30000, // 30 seconds timeout
+      socketTimeoutMS: 45000, // 45 seconds socket timeout
     }).connect();
+    console.log("*********************", cached.promise, "********************")
   }
+  
 
   cached.conn = await cached.promise;
-  console.log("Connected to MongoDB!");
+  console.log('Connected to MongoDB! Using database:', MONDODB_DB_NAME,  "******************",cached.conn, "********************");
   return cached.conn;
 }
+
 
 export default connectToDatabase;

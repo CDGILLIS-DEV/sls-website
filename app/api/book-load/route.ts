@@ -5,8 +5,12 @@ import nodemailer from 'nodemailer';
 
 export async function POST(req: Request) {
   try {
-    const data = await req.json();
+    const client = await connectToDatabase(); 
+    const db = client.db(process.env.MONGODB_DB_NAME)
+    const collection =db.collection("loadbookings");
 
+    const data = await req.json();
+    const result = await collection.insertOne(data);
     // validate required data
     if (!data.companyName || !data.email || !data.pickupLocation || !data.dropoffLocation || !data.freightDetails) {
         return NextResponse.json(
@@ -16,13 +20,12 @@ export async function POST(req: Request) {
     }
     console.log("***********All Fields Were Filled Properly***********")
     // connect to MongoDB
-    await connectToDatabase();
 
     // save to MongoDB
     const newBooking = new LoadBooking(data);
     console.log("*************", newBooking, "***************")    
     await newBooking.save();
-    
+
     const transporter = nodemailer.createTransport({
         service: "Gmail",
         auth: {
