@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     const newBooking = new LoadBooking(data);
     console.log("*************", newBooking, "***************")    
     await newBooking.save();
-
+    
     const transporter = nodemailer.createTransport({
         service: "Gmail",
         auth: {
