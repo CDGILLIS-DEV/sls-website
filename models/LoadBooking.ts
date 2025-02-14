@@ -1,7 +1,7 @@
 /* eslint-disable */
 import mongoose,{ Schema, Document, ObjectId } from "mongoose";
 
-export interface ILoadBooking {
+export interface LoadBooking {
     companyName: string;
     email: string;
     pickupLocation: string;
@@ -10,7 +10,7 @@ export interface ILoadBooking {
     createdAt?: Date;
 }
 
-const LoadBookingSchema = new Schema<ILoadBooking>({
+const LoadBookingSchema = new Schema<LoadBooking>({
     companyName: { type: String, required: true },
     email: { type: String, required: true },
     pickupLocation: { type: String, required: true },
@@ -24,4 +24,4 @@ LoadBookingSchema.index({ companyName: 1 }); // Index on createdAt for efficient
 
 
 
-export default ILoadBooking;
+export default LoadBooking;

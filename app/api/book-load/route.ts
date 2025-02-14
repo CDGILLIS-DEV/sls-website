@@ -1,14 +1,14 @@
 /* eslint-disable */
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongodb";
-import  ILoadBooking  from "@/models/LoadBooking";
+import  { LoadBooking }  from "@/models/LoadBooking";
 import nodemailer from 'nodemailer';
 
 export async function POST(req: Request) {
     try {
         const { name, email, subject, message } = await req.json();
         const { db } = await connectToDatabase();
-        const data:  ILoadBooking = await req.json();
+        const data:  LoadBooking = await req.json();
 
         // Validate input
         if (!data.companyName || !data.email || !data.pickupLocation || !data.dropoffLocation || !data.freightDetails) {
