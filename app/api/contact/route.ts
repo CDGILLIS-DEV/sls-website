@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { NextResponse } from 'next/server';
-// import connectToDatabase  from '@/lib/mongodb';
+import { connectToDatabase } from "@/lib/mongodb";
 import Inquiry from '@/models/Inquiry';
 import nodemailer from 'nodemailer';
 
@@ -8,44 +8,29 @@ import nodemailer from 'nodemailer';
 
 export async function POST(req: Request) {
   try {
-    const { name, email, subject, message } = await req.json();
+        const { db } = await connectToDatabase();
+        const data:  Inquiry = await req.json();
+        console.log(data);
+        // Validate input
+        if (!data.name|| !data.email || !data.message) {
+            return NextResponse.json({ success: false, message: "All fields are required." }, { status: 400 });
+        }
 
-    if (!name || !email || !message) {
-      return NextResponse.json(
-        { success: false, message: 'All fields are required.' },
-        { status: 400 }
-      );
+        // Insert data into MongoDB collection
+        const result = await db.collection("inquiries").insertOne({
+            ...data,
+            createdAt: new Date(),
+        });
+
+        if (!result.acknowledged) {
+          throw new Error("Failed to insert booking.");
+        }
+        
+        console.log("Inquiry successfully saved:", result.insertedId);
+        return NextResponse.json({ success: true, message: "Thanks. Your contact information was submitted successfully! Someone will contact you soon." }, { status: 201 });
+
+      } catch (error) {
+        console.error("Error processing booking:", error);
+        return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 });
     }
-
-    // await connectToDatabase();
-    // console.log("")
-    // const inquiry: Inquiry = ({
-    //   name,
-    //   email,
-    //   subject,
-    //   message,
-    // });
-
-    // console.log("Confirmed", inquiry);
-
-    const transporter = nodemailer.createTransport({
-      service: 'Gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: `Inquiry Received: ${subject}`,
-      text: `Thank you for contacting us, ${name}. We will get back to you soon.`,
-    });
-
-    return NextResponse.json({ success: true, message: 'Message sent successfully.' });
-  } catch (error) {
-    console.error('Error:', error);
-    return NextResponse.json({ success: false, message: 'Error sending message.' }, { status: 500 });
-  }
 }
