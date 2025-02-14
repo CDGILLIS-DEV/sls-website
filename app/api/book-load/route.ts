@@ -1,57 +1,50 @@
-import { NextResponse } from 'next/server';
-import connectToDatabase from '@/lib/mongodb';
-import LoadBooking from '@/models/LoadBooking';
+/* eslint-disable */
+import { NextResponse } from "next/server";
+import { connectToDatabase } from "@/lib/mongodb";
+import  ILoadBooking  from "@/models/LoadBooking";
 import nodemailer from 'nodemailer';
 
 export async function POST(req: Request) {
-  try {
-    const client = await connectToDatabase(); 
-    const db = client.db(process.env.MONGODB_DB_NAME)
-    const collection =db.collection("loadbookings");
+    try {
+        const { name, email, subject, message } = await req.json();
+        const { db } = await connectToDatabase();
+        const data:  ILoadBooking = await req.json();
 
-    const data = await req.json();
-    const result = await collection.insertOne(data);
+        // Validate input
+        if (!data.companyName || !data.email || !data.pickupLocation || !data.dropoffLocation || !data.freightDetails) {
+            return NextResponse.json({ success: false, message: "All fields are required." }, { status: 400 });
+        }
 
-    // validate required data
-    if (!data.companyName || !data.email || !data.pickupLocation || !data.dropoffLocation || !data.freightDetails) {
-        return NextResponse.json(
-            { success: false, message: "All fields are required." },
-            { status: 400 }
-        );
+        // Insert data into MongoDB collection
+        const result = await db.collection("loadbookings").insertOne({
+            ...data,
+            createdAt: new Date(),
+        });
+
+        if (!result.acknowledged) {
+            throw new Error("Failed to insert booking.");
+        }
+
+            const transporter = nodemailer.createTransport({
+              service: 'Gmail',
+              auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
+              },
+            });
+        
+            await transporter.sendMail({
+              from: process.env.EMAIL_USER,
+              to: email,
+              subject: `Load Booking: ${subject}`,
+              text: `Thank you for contacting us, ${name}. We will get back to you soon.`,
+            });
+
+        console.log("Booking successfully saved:", result.insertedId);
+        return NextResponse.json({ success: true, message: "Booking submitted successfully!" }, { status: 201 });
+
+    } catch (error) {
+        console.error("Error processing booking:", error);
+        return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 });
     }
-    console.log("***********All Fields Were Filled Properly***********")
-    // connect to MongoDB
-    await connectToDatabase();
-
-    // save to MongoDB
-    const newBooking = new LoadBooking(data);
-    console.log("*************", newBooking, "***************")    
-    await newBooking.save();
-
-    const transporter = nodemailer.createTransport({
-        service: "Gmail",
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS,
-        },
-    });   
-
-    await transporter.sendMail({
-        to: data.email,
-        subject: "Booking Confirmation",
-        text: 'Hello ${data.companyName}, \n\nYour booking has been successfully ' + 
-        'received!\n\nDetails:\nPickup: ${data.pickupLocation}\nDropoff: ${data.dropoffLocation}\nFreight:' + 
-        ' ${data.freightDetails}\n\nThank you!'
-    });
-
-    return NextResponse.json(
-        { success: true, result},
-        { status: 200}
-        );   
-   } catch(error) {
-     console.error("Error processing booking:", error);
-     return NextResponse.json(
-        { success: false, message: "Internal server error" },
-     { status: 500 });   
-   }
 }

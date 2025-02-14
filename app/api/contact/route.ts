@@ -1,5 +1,6 @@
+/* eslint-disable */
 import { NextResponse } from 'next/server';
-import connectToDatabase  from '@/lib/mongodb';
+// import connectToDatabase  from '@/lib/mongodb';
 import Inquiry from '@/models/Inquiry';
 import nodemailer from 'nodemailer';
 
@@ -16,16 +17,16 @@ export async function POST(req: Request) {
       );
     }
 
-    await connectToDatabase();
-    console.log("")
-    const inquiry: Inquiry = ({
-      name,
-      email,
-      subject,
-      message,
-    });
+    // await connectToDatabase();
+    // console.log("")
+    // const inquiry: Inquiry = ({
+    //   name,
+    //   email,
+    //   subject,
+    //   message,
+    // });
 
-    console.log("Confirmed", inquiry);
+    // console.log("Confirmed", inquiry);
 
     const transporter = nodemailer.createTransport({
       service: 'Gmail',

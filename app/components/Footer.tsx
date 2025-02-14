@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#047857] text-white text-center py-6 mt-auto">
+    <footer className="bg-[#033F02] text-white text-center py-6 mt-auto">
       <div className="container mx-auto">
         <div className="flex justify-center space-x-4">
           <a href="mailto:carldgillis1@gmail.com.com" className="flex items-center space-x-2">
