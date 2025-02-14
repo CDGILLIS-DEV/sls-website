@@ -34,3 +34,5 @@ export async function connectToDatabase() {
         throw new Error("Failed to connect to MongoDB");
     }
 }
+
+export default connectToDatabase;
