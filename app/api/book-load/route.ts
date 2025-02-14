@@ -6,7 +6,6 @@ import nodemailer from 'nodemailer';
 
 export async function POST(req: Request) {
     try {
-        const { name, email, subject, message } = await req.json();
         const { db } = await connectToDatabase();
         const data:  LoadBooking = await req.json();
 
@@ -25,20 +24,20 @@ export async function POST(req: Request) {
             throw new Error("Failed to insert booking.");
         }
 
-            const transporter = nodemailer.createTransport({
-              service: 'Gmail',
-              auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-              },
-            });
+            // const transporter = nodemailer.createTransport({
+            //   service: 'Gmail',
+            //   auth: {
+            //     user: process.env.EMAIL_USER,
+            //     pass: process.env.EMAIL_PASS,
+            //   },
+            // });
         
-            await transporter.sendMail({
-              from: process.env.EMAIL_USER,
-              to: email,
-              subject: `Load Booking: ${subject}`,
-              text: `Thank you for contacting us, ${name}. We will get back to you soon.`,
-            });
+            // await transporter.sendMail({
+            //   from: process.env.EMAIL_USER,
+            //   to: email,
+            //   subject: `Load Booking: ${subject}`,
+            //   text: `Thank you for contacting us, ${name}. We will get back to you soon.`,
+            // });
 
         console.log("Booking successfully saved:", result.insertedId);
         return NextResponse.json({ success: true, message: "Booking submitted successfully!" }, { status: 201 });
