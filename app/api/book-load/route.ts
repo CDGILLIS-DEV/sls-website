@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     try {
         const { db } = await connectToDatabase();
         const data:  LoadBooking = await req.json();
-
+        console.log(data);
         // Validate input
         if (!data.companyName || !data.email || !data.pickupLocation || !data.dropoffLocation || !data.freightDetails) {
             return NextResponse.json({ success: false, message: "All fields are required." }, { status: 400 });
@@ -19,6 +19,7 @@ export async function POST(req: Request) {
             ...data,
             createdAt: new Date(),
         });
+        // console.log(result);
 
         if (!result.acknowledged) {
             throw new Error("Failed to insert booking.");
