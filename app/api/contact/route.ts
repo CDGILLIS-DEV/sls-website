@@ -11,9 +11,7 @@ export async function POST(req: Request) {
   try {
     const data = await req.json();
     const { db } = await connectToDatabase();
-    const collection = db.collection("loadbookings");
-
-    const newBooking = await collection.insertOne(data);
+  
         // Validate input
         if (!data.name|| !data.email || !data.message) {
             return NextResponse.json({ success: false, message: "All fields are required." }, { status: 400 });
@@ -32,7 +30,7 @@ export async function POST(req: Request) {
         console.log("Inquiry successfully saved:", result.insertedId);
 
         await sendEmail(
-          "New Load Booking Submitted",
+          "New Inquiry Submitted",
           `A new load booking has been submitted: \nCompany: ${data.companyName} \nEmail: ${data.email}\n
                               Pickup: ${data.pickupLocation}\nDropoff: ${data.dropoffLocation}`
       );
