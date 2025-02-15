@@ -24,20 +24,20 @@ export async function POST(req: Request) {
         });
 
         if (!result.acknowledged) {
-          throw new Error("Failed to insert booking.");
+          throw new Error("Failed to insert inquiry.");
         }
         
         console.log("Inquiry successfully saved:", result.insertedId);
 
         await sendEmail(
           "New Inquiry Submitted",
-          `A new load booking has been submitted: \nCompany: ${data.companyName} \nEmail: ${data.email}\n
+          `A new inquiry has been submitted: \nCompany: ${data.companyName} \nEmail: ${data.email}\n
                               Pickup: ${data.pickupLocation}\nDropoff: ${data.dropoffLocation}`
       );
         return NextResponse.json({ success: true, message: "Thanks. Your contact information was submitted successfully! Someone will contact you soon." }, { status: 201 });
 
       } catch (error) {
-        console.error("Error processing booking:", error);
+        console.error("Error processing submission:", error);
         return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 });
     }
 }

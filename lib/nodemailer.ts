@@ -16,7 +16,7 @@ export async function sendEmail(subject:string, text: string) {
             subject: subject,
             text: text,
         };
-        console.log(`*********${transporter.get.toString}***********`)
+        
         const info = await transporter.sendMail(mailOptions);
         console.log("Email sent: ", info.response);
     } catch (error) {
