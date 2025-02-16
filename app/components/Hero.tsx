@@ -4,8 +4,8 @@ import React from "react";
 
 const Hero = () => {
     return (
-        <section className="relative flex flex-col justify-center items-center min-h-screen bg-light"
-            style={{ backgroundImage: "url(/Users/darnell/sls-website/public/truck_on_rainday.jpeg)" }}>
+        <section className="relative flex flex-col justify-center items-center min-h-screen bg-light bg-cover bg-center bg-no-repeat h-screen"
+            style={{ backgroundImage: "url(/truck_on_rainday.jpeg)" }}>
       <div className="container mx-auto text-center px-6 pb-20">
         <h1 className="text-5xl md:text-5xl font-light text-primary leading-tight tracking-wide">
           Welcome to Simpatico Logistics Services
