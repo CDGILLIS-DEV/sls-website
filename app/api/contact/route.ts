@@ -32,7 +32,7 @@ export async function POST(req: Request) {
         await sendEmail(
           "New Inquiry Submitted",
           `A new inquiry has been submitted: \nCompany: ${data.companyName} \nEmail: ${data.email}\n
-                              Pickup: ${data.pickupLocation}\nDropoff: ${data.dropoffLocation}`
+                              Message: ${data.message}`
       );
         return NextResponse.json({ success: true, message: "Thanks. Your contact information was submitted successfully! Someone will contact you soon." }, { status: 201 });
 
