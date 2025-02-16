@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
 
 const Navbar = () => {
@@ -11,7 +12,13 @@ const Navbar = () => {
     <nav className="bg-white shadow-md fixed w-full top-0 left-0 z-50">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
         <Link href="/" className="text-primary text-2xl font-serif font-extralight">
-          Simpatico Logistics Services
+          <Image
+            src="/SLS LOGO.png"
+            alt="Simpatico Logistics Services Logo"
+            width={200}
+            height={50}
+            className="cursor-pointer"
+          />
         </Link>
         <div className="hidden md:flex space-x-6">
           <Link href="/" className="text-dark hover:text-primary transition-all">
