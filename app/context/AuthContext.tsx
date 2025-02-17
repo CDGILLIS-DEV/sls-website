@@ -11,6 +11,15 @@ import {
  } from "firebase/auth";
 import { unsubscribe } from "diagnostics_channel";
 
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firbase";
+
+const fetchUserRole = async (uid: string) => {
+   const userRef = doc(db, "users", uid);
+   const userSnap = await getDoc(userRef);
+   return userSnap.exists() ? userSnap.data().role : "customers";
+};
+
  interface AuthContextProps {
     user: User | null;
     loading: boolean;
