@@ -10,6 +10,9 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, signOutUser } = useAuth();
 
+  // Function to close the menu when clicking a link
+  const closeMenu = () => setIsOpen(false);
+
   return (
     <nav className="bg-white shadow-md fixed w-full top-0 left-0 z-50">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -67,21 +70,35 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-white shadow-md">
-          <Link href="/" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white">Home</Link>
-          <Link href="/services" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white">Services</Link>
-          <Link href="/about" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white">About</Link>
-          <Link href="/contact" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white">Contact</Link>
-          <Link href="/rate-estimator" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white">Rate Estimator</Link>
-          <Link href="/book-load" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white">Book Load</Link>
+          <Link href="/" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
+            Home
+          </Link>
+          <Link href="/services" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
+            Services
+          </Link>
+          <Link href="/about" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
+            About
+          </Link>
+          <Link href="/contact" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
+            Contact
+          </Link>
+          <Link href="/rate-estimator" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
+            Rate Estimator
+          </Link>
+          <Link href="/book-load" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
+            Book Load
+          </Link>
 
           {/* Authentication Links in Mobile Menu */}
           {user ? (
             <>
-              <Link href="/dashboard" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white">Dashboard</Link>
+              <Link href="/dashboard" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
+                Dashboard
+              </Link>
               <button
                 onClick={() => {
                   signOutUser();
-                  setIsOpen(false);
+                  closeMenu();
                 }}
                 className="w-full text-left px-6 py-2 text-red-600 hover:bg-red-100"
               >
@@ -90,8 +107,12 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link href="/login" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white">Login</Link>
-              <Link href="/signup" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white">Sign Up</Link>
+              <Link href="/login" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
+                Login
+              </Link>
+              <Link href="/signup" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
+                Sign Up
+              </Link>
             </>
           )}
         </div>
