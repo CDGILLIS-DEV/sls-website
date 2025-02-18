@@ -1,4 +1,4 @@
-import RateEstimator from "../components/RateEstimator";
+import RateEstimator from "@/components/RateEstimator";
 
 export default function RateEstimatorPage() {
     return (

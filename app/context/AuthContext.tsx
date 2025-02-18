@@ -1,4 +1,6 @@
 /* eslint-disable */
+"use client"
+
 import { Children, createContext, useContext, useEffect, useState } from "react";
 import { auth, googleProvider } from "@/lib/firbase";
 import { 
