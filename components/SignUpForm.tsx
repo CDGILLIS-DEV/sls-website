@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { FirebaseError } from "firebase/app";
 
 export default function SignUpForm() {
   const { signUp, signInWithGoogle } = useAuth();
@@ -33,8 +34,25 @@ export default function SignUpForm() {
         setTimeout(() => router.push("/login"), 5000); // Redirect to login after 5 sec
       }
     } catch (err: any) {
+      if (err instanceof FirebaseError) {
+        // Handle specific Firebase authentication errors
+        switch (err.code) {
+          case "auth/email-already-in-use":
+            setError("This email is already in use. Try signing in instead.");
+            break;
+          case "auth/invalid-email":
+            setError("Invalid email address. Please enter a valid email.");
+            break;
+          case "auth/weak-password":
+            setError("Password should be at least 6 characters long.");
+            break;
+          default:
+            setError("Signup failed. Please try again.");
+        }
+      } else {
+        setError("An unexpected error occurred. Please try again.");
+      }
       console.error(err);
-      setError("Signup failed. Please try again.");
     }
   };
 
