@@ -15,8 +15,8 @@ const Navbar = () => {
           <Image
             src="/SLS LOGO.png"
             alt="Simpatico Logistics Services Logo"
-            width={200}
-            height={50}
+            width={175}
+            height={50} 
             className="cursor-pointer"
           />
         </Link>
