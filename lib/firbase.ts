@@ -1,8 +1,10 @@
+/* eslint-disable */
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { GoogleAuthProvider } from "firebase/auth/web-extension";
+import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getDisplayName } from "next/dist/shared/lib/utils";
+// import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth/web-extension";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -22,5 +24,27 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app); // Initialize Firestore
 const googleProvider = new GoogleAuthProvider();
+
+// Google Sign-in function 
+export const signInWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
+
+    // Store user data in Firestore
+    await setDoc(doc(db, "users", user.uid), {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName || "",
+      photoURL: user.photoURL || "",
+      createdAt: new Date(),
+      role: "customer",
+    });
+
+    return user;
+  } catch (error) {
+    console.error("Google Sign-in Error:", error);
+  }
+};
 
 export { auth, googleProvider, db };
