@@ -1,4 +1,4 @@
-import BookLoadForm from "@/components/BookLoadForm";
+import BookLoadForm from "../../components/BookLoadForm";
 
 export default function BookLoadPage() {
     return (

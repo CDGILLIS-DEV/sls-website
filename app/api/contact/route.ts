@@ -1,9 +1,9 @@
 /* eslint-disable */
 import { NextResponse } from "next/server";
-import { connectToDatabase } from "@/lib/mongodb";
-import  { LoadBooking }  from "@/models/LoadBooking";
+import { connectToDatabase } from "../../../lib/mongodb";
+import  { LoadBooking }  from "../../../models/LoadBooking";
 import nodemailer from 'nodemailer';
-import { sendEmail } from "@/lib/nodemailer";
+import { sendEmail } from "../../../lib/nodemailer";
 
 
 

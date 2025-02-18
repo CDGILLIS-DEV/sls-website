@@ -9,7 +9,7 @@ import {
   onAuthStateChanged,
   User,
 } from "firebase/auth";
-import { auth, googleProvider, db } from "@/lib/firebase";
+import { auth, googleProvider, db } from "../../lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 // Define the context type
