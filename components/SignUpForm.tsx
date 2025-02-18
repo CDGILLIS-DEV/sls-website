@@ -32,7 +32,7 @@ export default function Signup() {
             <form onSubmit={handleSubmit}>
                 <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
                 <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-                <button type="submit">Sign Up</button>
+                <button type="submit">Sign Up!</button>
             </form>
         </div>
     );
