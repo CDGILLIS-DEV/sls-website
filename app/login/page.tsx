@@ -5,25 +5,30 @@ import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
+    const { signIn, signInWithGoogle } = useAuth(); 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { login, googleLogin } = useAuth();
     const router = useRouter();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await login(email, password);
-            router.push("/dashboard");
+            const user = await signIn(email, password);
+            if (user) { 
+                router.push("/dashboard")
+            };
         } catch (error) {
             console.error(error);
+            alert("Invalid email or password/ Pleas try again.")
         }
     };
 
     const handleGoogleLogin = async () => {
         try {
-            await googleLogin();
-            router.push("/dashboard");
+            const user = await signInWithGoogle();
+            if (user) {
+                router.push("/dashboard")
+            };
         } catch (error) {
             console.error(error);
         }

@@ -19,10 +19,14 @@ export default function Signup() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await signUp(email, password);
-            router.push("/dashboard");
+          const user = await signUp(email, password);
+
+            if (user) {
+            router.push("/dashboard"); // Redirect only if sign-in/signup was successful
+          }
         } catch (error) {
             console.error("Signup Error: ",error);
+            alert("Invalid email or password. Please try again.");
         }
     };
 
