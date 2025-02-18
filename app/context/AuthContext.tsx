@@ -1,13 +1,13 @@
 "use client";
-
 import { createContext, useContext, useEffect, useState } from "react";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged,
-  User,
+import { 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  signInWithPopup, 
+  sendEmailVerification,
+  signOut, 
+  onAuthStateChanged, 
+  User 
 } from "firebase/auth";
 import { auth, googleProvider, db } from "../../lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -26,93 +26,86 @@ interface AuthContextProps {
 // Create context
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
-// Custom hook for using auth context
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
-};
-
-// Auth Provider component
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
   const [role, setRole] = useState<string | null>(null);
 
-  // Handle user state changes
+  // Listen for auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-
       if (currentUser) {
-        // Fetch user role from Firestore (if using role-based access)
+        // Fetch the user's role from Firestore
         const userRef = doc(db, "users", currentUser.uid);
         const userSnap = await getDoc(userRef);
         if (userSnap.exists()) {
           setRole(userSnap.data().role);
-        } else {
-          setRole("customer"); // Default role
-          await setDoc(userRef, { role: "customer" }); // Save role to Firestore
         }
+        setUser(currentUser);
       } else {
+        setUser(null);
         setRole(null);
       }
+      setLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
 
-  // Sign up function
+  // Sign Up with Email & Password + Send Verification Email
   const signUp = async (email: string, password: string) => {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const newUser = userCredential.user;
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    
+    // Send email verification
+    if (userCredential.user) {
+      await sendEmailVerification(userCredential.user);
       
-      // Store user in Firestore with a default role
-      await setDoc(doc(db, "users", newUser.uid), { email, role: "customer" });
-
-      return newUser;
-    } catch (error) {
-      console.error("Signup Error:", error);
-      throw error;
+      // Store user details in Firestore
+      const userRef = doc(db, "users", userCredential.user.uid);
+      await setDoc(userRef, {
+        email: email,
+        role: "customer",
+        verified: false,
+      });
     }
+
+    return userCredential.user;
   };
 
-  // Sign in function
+  // Sign In with Email & Password (Only allow verified users)
   const signIn = async (email: string, password: string) => {
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      return userCredential.user;
-    } catch (error) {
-      console.error("Signin Error:", error);
-      throw error;
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    
+    if (!userCredential.user.emailVerified) {
+      throw new Error("Please verify your email before logging in.");
     }
+
+    return userCredential.user;
   };
 
-  // Sign in with Google
+  // Sign In with Google & Store in Firestore if New User
   const signInWithGoogle = async () => {
-    try {
-      const userCredential = await signInWithPopup(auth, googleProvider);
-      const googleUser = userCredential.user;
+    const userCredential = await signInWithPopup(auth, googleProvider);
+    const googleUser = userCredential.user;
 
-      // Check if user exists in Firestore
-      const userRef = doc(db, "users", googleUser.uid);
-      const userSnap = await getDoc(userRef);
-      if (!userSnap.exists()) {
-        await setDoc(userRef, { email: googleUser.email, role: "customer" });
-      }
+    // Check if the user already exists in Firestore
+    const userRef = doc(db, "users", googleUser.uid);
+    const userSnap = await getDoc(userRef);
 
-      return googleUser;
-    } catch (error) {
-      console.error("Google Signin Error:", error);
-      throw error;
+    if (!userSnap.exists()) {
+      // If the user is new, save them in Firestore
+      await setDoc(userRef, {
+        email: googleUser.email,
+        role: "customer",
+        verified: true,
+      });
+      setRole("customer"); // Set role for state
     }
+
+    return googleUser;
   };
 
-  // Sign out function
+  // Sign Out
   const signOutUser = async () => {
     await signOut(auth);
     setUser(null);
@@ -126,3 +119,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};
