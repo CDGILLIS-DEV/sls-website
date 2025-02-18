@@ -10,7 +10,7 @@ const Hero = () => {
         <h1 className="text-5xl md:text-5xl font-light text-[#64e687] leading-tight tracking-wide">
           Welcome to Simpatico Logistics Services
         </h1>
-        <p className="mt-4 text-lg text-orange-400 max-w-2xl mx-auto pt-10">
+        <p className="mt-4 text-lg text-white max-w-2xl mx-auto pt-10">
           Delivering seamless and efficient freight solutions.
         </p>
         <div className="mt-8 pb-48">
