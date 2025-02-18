@@ -17,7 +17,7 @@ const Footer = () => {
             <span>+1 314 629 3352</span>
           </a>
         </div>
-        <p className="mt-4">&copy; {new Date().getFullYear()} Simpatico Logistics Services LLC. All rights reserved.</p>
+        <p className="mt-4 text-gray-500">&copy; {new Date().getFullYear()} Simpatico Logistics Services LLC. All rights reserved.</p>
         <div className="flex justify-center space-x-4 mt-2">
           <Link href="/privacy-policy" className="hover:text-primary transition-all">
             Privacy Policy
