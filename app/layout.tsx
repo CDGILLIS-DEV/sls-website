@@ -25,14 +25,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
+    <AuthProvider>
     <html lang="en">
       <body className="flex flex-col min-h-screen bg-light text-dark font-sans pt-20">
-        <AuthProvider>
         <Navbar />
         <main className="flex-grow container mx-auto pt-20 py-12">{children}</main>
         <Footer />
-        </AuthProvider>
       </body>
     </html>
+    </AuthProvider>
   );
 }
