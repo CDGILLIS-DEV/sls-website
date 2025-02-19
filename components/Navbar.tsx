@@ -51,7 +51,7 @@ const Navbar = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-6 items-center">
-<ScrollLink to="services" smooth={true} duration={800} className="cursor-pointer text-dark hover:text-primary transition-all" onClick={closeMenu}>
+          <ScrollLink to="services" smooth={true} duration={800} className="cursor-pointer text-dark hover:text-primary transition-all" onClick={closeMenu}>
             Services
           </ScrollLink>
 
@@ -63,6 +63,13 @@ const Navbar = () => {
             Contact
           </ScrollLink>
 
+          <Link href="/rate-estimator" className="cursor-pointer text-dark hover:text-primary transition-all"onClick={closeMenu}>
+            Quote
+          </Link>
+
+          <Link href="/book-load" className="cursor-pointer text-dark hover:text-primary transition-all"onClick={closeMenu}>
+            Booking
+          </Link>
 
           {/* Authentication Links */}
           {user ? (
