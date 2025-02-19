@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
 import { Link as ScrollLink } from "react-scroll"; // Import react-scroll
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,24 +15,39 @@ const Navbar = () => {
   // Function to close menu after clicking a link
   const closeMenu = () => setIsOpen(false);
 
+  const pathname = usePathname();
+
   return (
     <nav className="bg-white shadow-md fixed w-full top-0 left-0 z-50">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+
         {/* Logo (Home link) */}
-        <ScrollLink
-          to="hero"
-          smooth={true}
-          duration={800}
-          className="cursor-pointer"
-          onClick={closeMenu}
-        >
-          <Image
-            src="/SLS LOGO.png"
-            alt="Simpatico Logistics Services Logo"
-            width={175}
-            height={50}
-          />
-        </ScrollLink>
+        {pathname ==="/"?( <ScrollLink
+            to="hero"
+            smooth={true}
+            duration={800}
+            className="cursor-pointer"
+            onClick={closeMenu}
+          >
+            <Image
+              src="/SLS LOGO.png"
+              alt="Simpatico Logistics Services Logo"
+              width={175}
+              height={50}
+            />
+          </ScrollLink>):(
+            <Link href="/" 
+            className="cursor-pointer"
+            onClick={closeMenu}
+            >
+            <Image
+              src="/SLS LOGO.png"
+              alt="Simpatico Logistics Services Logo"
+              width={175}
+              height={50}
+            />  
+            </Link>
+          )}
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-6 items-center">
@@ -47,9 +64,9 @@ const Navbar = () => {
           {/* Authentication Links */}
           {user ? (
             <>
-              <ScrollLink to="dashboard" smooth={true} duration={800} className="cursor-pointer text-dark hover:text-primary transition-all">
+              <Link href="/dashboard"  className=" text-dark px-4 py-2 rounded-lg  transition-all cursor-grab">
                 Dashboard
-              </ScrollLink>
+              </Link>
               <button
                 onClick={signOutUser}
                 className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all"
@@ -59,12 +76,12 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <ScrollLink to="login" smooth={true} duration={800} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all cursor-pointer">
+              <Link href="/login"  className=" text-dark  px-4 py-2 rounded-lg  transition-all cursor-pointer">
                 Login
-              </ScrollLink>
-              <ScrollLink to="signup" smooth={true} duration={800} className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-all cursor-pointer">
-                Sign Up
-              </ScrollLink>
+              </Link>
+              <Link href="/signup"  className=" text-dark px-4 py-2 rounded-lg  transition-all cursor-pointer">
+                Join
+              </Link>
             </>
           )}
         </div>
@@ -108,12 +125,12 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <ScrollLink to="login" smooth={true} duration={800} className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
+              <Link href="/login"  className=" text-dark px-4 py-2 rounded-lg  transition-all cursor-pointer">
                 Login
-              </ScrollLink>
-              <ScrollLink to="signup" smooth={true} duration={800} className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
-                Sign Up
-              </ScrollLink>
+              </Link>
+              <Link href="/signup"  className=" text-dark px-4 py-2 rounded-lg  transition-all cursor-pointer">
+                Join
+              </Link>
             </>
           )}
         </div>
