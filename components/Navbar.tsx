@@ -7,6 +7,8 @@ import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
 import { Link as ScrollLink } from "react-scroll"; // Import react-scroll
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Button from "../components/Button"; // Import the new button
+import router from "next/router";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -136,12 +138,12 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link href="/login"  className=" text-dark px-4 py-2 rounded-lg  transition-all cursor-pointer">
+              <Button onClick={() => router.push("/login")} className="bg-blue-600">
                 Login
-              </Link>
-              <Link href="/signup"  className=" text-dark px-4 py-2 rounded-lg  transition-all cursor-pointer">
-                Join
-              </Link>
+              </Button>
+              <Button onClick={() => router.push("/signup")} className="bg-green-600">
+                Sign Up
+              </Button>
             </>
           )}
         </div>

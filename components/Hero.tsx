@@ -1,58 +1,61 @@
 "use client";
 
-import { motion } from "framer-motion";
-import React from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const Hero = () => {
+  const { scrollY } = useScroll(); // Track scroll position
+  const yPos = useTransform(scrollY, [0, 300], [0, -50]); // Move background slightly on scroll
+
   return (
-    <section 
-      className="relative flex flex-col justify-center items-center min-h-screen bg-light bg-cover bg-center bg-no-repeat h-screen"
-      style={{ backgroundImage: "url(/truck_on_rainday.jpeg)" }}
-    >
-      {/* Dark Overlay for better contrast */}
-      <div className="absolute inset-0 bg-black/40"></div>
-
-      {/* Content Container */}
+    <section className="relative w-full h-screen overflow-hidden flex flex-col justify-center items-center text-center">
+      {/* Parallax Background */}
       <motion.div 
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, ease: "easeOut" }}
-        className="relative container mx-auto text-center px-6 pb-20"
-      >
-        {/* Heading Animation */}
-        <motion.h1 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
-          className="text-5xl md:text-5xl font-light text-[#64e687] leading-tight tracking-wide"
-        >
-          Welcome to Simpatico Logistics Services
-        </motion.h1>
+        className="absolute inset-0 bg-cover bg-center" 
+        style={{ backgroundImage: 'url("/truck_on_rainday.jpeg")', y: yPos }} 
+      />
 
-        {/* Subheading Animation */}
-        <motion.p 
-          initial={{ opacity: 0, y: 30 }}
+      {/* Overlay to ensure text visibility */}
+      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+
+      {/* Hero Content */}
+      <div className="relative z-10 flex flex-col items-center">
+        <motion.h1 
+          className="text-white text-5xl md:text-6xl font-bold leading-tight"
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.4 }}
-          className="mt-4 text-lg text-white max-w-2xl mx-auto pt-10"
+          transition={{ duration: 0.8 }}
         >
-          Delivering seamless and efficient freight solutions.
+          Welcome to Simpatico Logistics
+        </motion.h1>
+        <motion.p 
+          className="text-gray-200 text-lg md:text-xl mt-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
+        >
+          Efficient logistics solutions with cutting-edge technology.
         </motion.p>
 
-        {/* CTA Button Animation */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.6 }}
-          className="mt-8 pb-48"
-        >
-          <a href="/services">
-            <button className="px-8 py-4 bg-green-600 text-white rounded-full shadow-lg transform transition hover:scale-110">
-              Explore Our Services
-            </button>
-          </a>
-        </motion.div>
-      </motion.div>
+        {/* Call to Action Buttons */}
+        <div className="mt-6 flex space-x-4">
+          <motion.a 
+            href="/services"
+            className="bg-primary text-white px-6 py-3 rounded-lg shadow-md transition-all hover:bg-green-700"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            View Services
+          </motion.a>
+          <motion.a 
+            href="/contact"
+            className="bg-white text-primary px-6 py-3 rounded-lg shadow-md border border-primary hover:bg-gray-200 transition-all"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Get in Touch
+          </motion.a>
+        </div>
+      </div>
     </section>
   );
 };
