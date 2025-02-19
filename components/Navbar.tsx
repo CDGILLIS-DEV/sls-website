@@ -51,15 +51,18 @@ const Navbar = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-6 items-center">
-          <ScrollLink to="services" smooth={true} duration={800} className="cursor-pointer text-dark hover:text-primary transition-all">
+<ScrollLink to="services" smooth={true} duration={800} className="cursor-pointer text-dark hover:text-primary transition-all" onClick={closeMenu}>
             Services
           </ScrollLink>
-          <ScrollLink to="about" smooth={true} duration={800} className="cursor-pointer text-dark hover:text-primary transition-all">
+
+          <ScrollLink to="about" smooth={true} duration={800} className="cursor-pointer text-dark hover:text-primary transition-all" onClick={closeMenu}>
             About
           </ScrollLink>
-          <ScrollLink to="contact" smooth={true} duration={800} className="cursor-pointer text-dark hover:text-primary transition-all">
+
+          <ScrollLink to="contact" smooth={true} duration={800} className="cursor-pointer text-dark hover:text-primary transition-all"onClick={closeMenu}>
             Contact
           </ScrollLink>
+
 
           {/* Authentication Links */}
           {user ? (
@@ -84,6 +87,7 @@ const Navbar = () => {
               </Link>
             </>
           )}
+
         </div>
 
         {/* Mobile Menu Toggle */}
