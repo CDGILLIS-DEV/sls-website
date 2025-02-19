@@ -1,9 +1,33 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 import Hero from "../components/Hero";
 import Services from "../components/Services";
 import About from "../components/About";
 import Contact from "../components/Contact";
 
-export default function Home() {
+// Helper function for fade-in scroll animations
+const FadeInSection = ({ children }: { children: React.ReactNode }) => {
+  const { ref, inView } = useInView({
+    triggerOnce: true, // Animates once when the section enters view
+    threshold: 0.2, // Triggers when 20% is visible
+  });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 50 }}
+      transition={{ duration: 2.0, ease: "easeOut" }}
+      className="w-full"
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+export default function HomePage() {
   return (
     <main className="relative flex flex-col items-center bg-light">
       {/* Hero Section */}
@@ -18,19 +42,25 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="min-h-screen w-full flex flex-col items-center justify-center bg-white py-20 px-6">
-        <Services />
-      </section>
+      <FadeInSection>
+        <section id="services" className="min-h-screen w-full flex flex-col items-center justify-center bg-white py-20 px-6">
+          <Services />
+        </section>
+      </FadeInSection>
 
       {/* About Section */}
-      <section id="about" className="min-h-screen w-full flex flex-col items-center justify-center bg-gray-100 py-20 px-6">
-        <About />
-      </section>
+      <FadeInSection>
+        <section id="about" className="min-h-screen w-full flex flex-col items-center justify-center bg-gray-100 py-20 px-6">
+          <About />
+        </section>
+      </FadeInSection>
 
       {/* Contact Section */}
-      <section id="contact" className="min-h-screen w-full flex flex-col items-center justify-center bg-white py-20 px-6">
-        <Contact />
-      </section>
+      <FadeInSection>
+        <section id="contact" className="min-h-screen w-full flex flex-col items-center justify-center bg-white py-20 px-6">
+          <Contact />
+        </section>
+      </FadeInSection>
     </main>
   );
 }
