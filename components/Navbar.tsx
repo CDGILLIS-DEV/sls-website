@@ -1,45 +1,55 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
+import { Link as ScrollLink } from "react-scroll"; // Import react-scroll
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, signOutUser } = useAuth();
 
-  // Function to close the menu when clicking a link
+  // Function to close menu after clicking a link
   const closeMenu = () => setIsOpen(false);
 
   return (
     <nav className="bg-white shadow-md fixed w-full top-0 left-0 z-50">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo */}
-        <Link href="/" className="text-primary text-2xl font-serif font-extralight">
+        {/* Logo (Home link) */}
+        <ScrollLink
+          to="hero"
+          smooth={true}
+          duration={800}
+          className="cursor-pointer"
+          onClick={closeMenu}
+        >
           <Image
             src="/SLS LOGO.png"
             alt="Simpatico Logistics Services Logo"
             width={175}
             height={50}
-            className="cursor-pointer"
           />
-        </Link>
+        </ScrollLink>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-6 items-center">
-          <Link href="/" className="text-dark hover:text-primary transition-all">Home</Link>
-          <Link href="/services" className="text-dark hover:text-primary transition-all">Services</Link>
-          <Link href="/about" className="text-dark hover:text-primary transition-all">About</Link>
-          <Link href="/contact" className="text-dark hover:text-primary transition-all">Contact</Link>
-          <Link href="/rate-estimator" className="text-dark hover:text-primary transition-all">Rate Estimator</Link>
-          <Link href="/book-load" className="text-dark hover:text-primary transition-all">Book Load</Link>
+          <ScrollLink to="services" smooth={true} duration={800} className="cursor-pointer text-dark hover:text-primary transition-all">
+            Services
+          </ScrollLink>
+          <ScrollLink to="about" smooth={true} duration={800} className="cursor-pointer text-dark hover:text-primary transition-all">
+            About
+          </ScrollLink>
+          <ScrollLink to="contact" smooth={true} duration={800} className="cursor-pointer text-dark hover:text-primary transition-all">
+            Contact
+          </ScrollLink>
 
           {/* Authentication Links */}
           {user ? (
             <>
-              <Link href="/dashboard" className="text-dark hover:text-primary transition-all">Dashboard</Link>
+              <ScrollLink to="dashboard" smooth={true} duration={800} className="cursor-pointer text-dark hover:text-primary transition-all">
+                Dashboard
+              </ScrollLink>
               <button
                 onClick={signOutUser}
                 className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all"
@@ -49,12 +59,12 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link href="/login" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all">
+              <ScrollLink to="login" smooth={true} duration={800} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all cursor-pointer">
                 Login
-              </Link>
-              <Link href="/signup" className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-all">
+              </ScrollLink>
+              <ScrollLink to="signup" smooth={true} duration={800} className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-all cursor-pointer">
                 Sign Up
-              </Link>
+              </ScrollLink>
             </>
           )}
         </div>
@@ -70,31 +80,22 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-white shadow-md">
-          <Link href="/" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
-            Home
-          </Link>
-          <Link href="/services" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
+          <ScrollLink to="services" smooth={true} duration={800} className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
             Services
-          </Link>
-          <Link href="/about" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
+          </ScrollLink>
+          <ScrollLink to="about" smooth={true} duration={800} className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
             About
-          </Link>
-          <Link href="/contact" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
+          </ScrollLink>
+          <ScrollLink to="contact" smooth={true} duration={800} className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
             Contact
-          </Link>
-          <Link href="/rate-estimator" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
-            Rate Estimator
-          </Link>
-          <Link href="/book-load" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
-            Book Load
-          </Link>
+          </ScrollLink>
 
           {/* Authentication Links in Mobile Menu */}
           {user ? (
             <>
-              <Link href="/dashboard" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
+              <ScrollLink to="dashboard" smooth={true} duration={800} className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
                 Dashboard
-              </Link>
+              </ScrollLink>
               <button
                 onClick={() => {
                   signOutUser();
@@ -107,12 +108,12 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link href="/login" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
+              <ScrollLink to="login" smooth={true} duration={800} className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
                 Login
-              </Link>
-              <Link href="/signup" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
+              </ScrollLink>
+              <ScrollLink to="signup" smooth={true} duration={800} className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
                 Sign Up
-              </Link>
+              </ScrollLink>
             </>
           )}
         </div>
