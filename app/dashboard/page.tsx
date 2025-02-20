@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import { Pie } from "react-chartjs-2";
 import "chart.js/auto";
+import toast, { Toaster } from "react-hot-toast"
 
 const Dashboard = () => {
   const { user } = useAuth();
