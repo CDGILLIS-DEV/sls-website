@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
+import { Link as ScrollLink } from "react-scroll";
 
 const Hero = () => {
   const { scrollY } = useScroll(); // Track scroll position
@@ -38,22 +39,33 @@ const Hero = () => {
 
         {/* Call to Action Buttons */}
         <div className="mt-6 flex space-x-4">
-          <motion.a 
-            href="/services"
-            className="bg-primary text-white px-6 py-3 rounded-lg shadow-md transition-all hover:bg-green-700"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <ScrollLink 
+            to="services" 
+            smooth={true} 
+            duration={800} 
+            className="bg-primary text-white px-6 py-3 rounded-lg shadow-md transition-all hover:bg-green-700 cursor-pointer"
           >
             View Services
-          </motion.a>
-          <motion.a 
-            href="/contact"
-            className="bg-white text-primary px-6 py-3 rounded-lg shadow-md border border-primary hover:bg-gray-200 transition-all"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          </ScrollLink>
+        </motion.div>
+
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <ScrollLink 
+            to="contact" 
+            smooth={true} 
+            duration={800} 
+            className="bg-white text-primary px-6 py-3 rounded-lg shadow-md border border-primary hover:bg-gray-200 transition-all cursor-pointer"
           >
             Get in Touch
-          </motion.a>
+          </ScrollLink>
+        </motion.div>
         </div>
       </div>
     </section>
