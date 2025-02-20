@@ -172,15 +172,84 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-white shadow-md">
-          <ScrollLink to="services" smooth={true} duration={800} className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
+        {pathname === "/" ? (
+          <ScrollLink 
+            to="services" 
+            smooth={true} 
+            duration={800} 
+            className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" 
+            onClick={closeMenu}
+          >
             Services
           </ScrollLink>
-          <ScrollLink to="about" smooth={true} duration={800} className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
+        ) : (
+          <button
+            onClick={() => {
+              setIsOpen(false); // Close mobile menu
+              setTimeout(() => {
+                router.push("/");
+                setTimeout(() => {
+                  document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+                }, 500);
+              }, 100);
+            }}
+            className="block px-6 py-2 text-dark hover:bg-primary hover:text-white"
+          >
+            Services
+          </button>
+        )}
+        {pathname === "/" ? (
+          <ScrollLink 
+            to="about" 
+            smooth={true} 
+            duration={800} 
+            className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" 
+            onClick={closeMenu}
+          >
             About
           </ScrollLink>
-          <ScrollLink to="contact" smooth={true} duration={800} className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
-            Contact
+        ) : (
+          <button
+            onClick={() => {
+              setIsOpen(false); // Close mobile menu
+              setTimeout(() => {
+                router.push("/");
+                setTimeout(() => {
+                  document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
+                }, 500);
+              }, 100);
+            }}
+            className="block px-6 py-2 text-dark hover:bg-primary hover:text-white"
+          >
+            About
+          </button>
+        )}
+        {pathname === "/" ? (
+          <ScrollLink 
+            to="contact" 
+            smooth={true} 
+            duration={800} 
+            className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" 
+            onClick={closeMenu}
+          >
+            Contact Us
           </ScrollLink>
+        ) : (
+          <button
+            onClick={() => {
+              setIsOpen(false); // Close mobile menu
+              setTimeout(() => {
+                router.push("/");
+                setTimeout(() => {
+                  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+                }, 500);
+              }, 100);
+            }}
+            className="block px-6 py-2 text-dark hover:bg-primary hover:text-white"
+          >
+            Contact Us
+          </button>
+        )}
 
           {/* Authentication Links in Mobile Menu */}
           {user ? (
