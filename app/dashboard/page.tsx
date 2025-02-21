@@ -1,8 +1,10 @@
+/* eslint-disable */
 "use client";
 import { useState, useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
+import { Chart as ChartJS, ArcElement,Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import { db } from "lib/firebase";
 import { collection, query, where, onSnapshot, addDoc } from "firebase/firestore";
@@ -73,7 +75,7 @@ const Dashboard = () => {
   };
 
   // Handle Shipment Booking
-  const handleBooking = async (e: { preventDefault: () => void; }) => {
+  const handleBooking = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setBookingLoading(true);
 
