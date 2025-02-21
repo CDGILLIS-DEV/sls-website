@@ -136,6 +136,7 @@ const Navbar = () => {
               <button
                 onClick={() => {
                   signOutUser();
+                  router.push("/")                 
                   closeMenu();
                 }}
                 className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all"
@@ -260,6 +261,7 @@ const Navbar = () => {
               <button
                 onClick={() => {
                   signOutUser();
+                  router.push("/")
                   closeMenu();
                 }}
                 className="w-full text-left px-6 py-2 text-red-600 hover:bg-red-100"
