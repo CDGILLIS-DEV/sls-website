@@ -8,6 +8,8 @@ import { useAuth } from "@/context/AuthContext";
 import { Pie } from "react-chartjs-2";
 import "chart.js/auto";
 import toast, { Toaster } from "react-hot-toast"; // Toast Notifications
+import { db } from "lib/firebase"; // Firestore Instance
+import { collection, query, onSnapshot } from "firebase/firestore";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -19,9 +21,39 @@ const Dashboard = () => {
     canceled: 1,
   });
 
-  // Simulate data loading
+  const [shipments, setShipments] = useState<{ 
+    id: string; 
+    trackingNumber: string; 
+    status: string; 
+    origin: string; 
+    destination: string; 
+    updatedAt: string; 
+  }[]>([]);
+
+
+  // Simulate initial data loading
   useEffect(() => {
     setTimeout(() => setLoading(false), 1500);
+  }, []);
+
+  // Fetch live shipment data from Firestore
+  useEffect(() => {
+    const q = query(collection(db, "shipments"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const shipmentData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        trackingNumber: doc.data().trackingNumber || "N/A",
+        status: doc.data().status || "Pending",
+        origin: doc.data().origin || "Unknown",
+        destination: doc.data().destination || "Unknown",
+        updatedAt: doc.data().updatedAt || new Date().toISOString(),
+      }));
+      
+      setShipments(shipmentData);
+      setLoading(false);
+    });
+
+    return () => unsubscribe(); // Cleanup listener on unmount
   }, []);
 
   // Shipment Status Chart Data
@@ -36,7 +68,7 @@ const Dashboard = () => {
     ],
   };
 
-  // Handle actions (e.g., booking shipment)
+  // Handle user actions (e.g., booking shipment)
   const handleAction = (message: string) => {
     toast.success(message);
   };
@@ -101,11 +133,7 @@ const Dashboard = () => {
             transition={{ duration: 0.7 }}
           >
             <h3 className="text-lg font-semibold">Active Shipments</h3>
-            {loading ? (
-              <div className="animate-pulse bg-gray-300 h-8 w-20 rounded"></div>
-            ) : (
-              <p className="text-3xl font-bold">{shipmentStats.inTransit}</p>
-            )}
+            <p className="text-3xl font-bold">{shipmentStats.inTransit}</p>
           </motion.div>
 
           {/* Recent Bookings */}
@@ -116,11 +144,7 @@ const Dashboard = () => {
             transition={{ duration: 0.8 }}
           >
             <h3 className="text-lg font-semibold">Recent Bookings</h3>
-            {loading ? (
-              <div className="animate-pulse bg-gray-300 h-8 w-20 rounded"></div>
-            ) : (
-              <p className="text-3xl font-bold">7</p>
-            )}
+            <p className="text-3xl font-bold">7</p>
           </motion.div>
         </div>
 
@@ -134,20 +158,14 @@ const Dashboard = () => {
             transition={{ duration: 0.9 }}
           >
             <h3 className="text-lg font-semibold">Invoice Summary</h3>
-            {loading ? (
-              <div className="animate-pulse bg-gray-300 h-8 w-40 rounded"></div>
-            ) : (
-              <>
-                <p className="text-gray-600">
-                  Total Paid:{" "}
-                  <span className="text-green-600 font-bold">$12,500</span>
-                </p>
-                <p className="text-gray-600">
-                  Outstanding:{" "}
-                  <span className="text-red-600 font-bold">$3,200</span>
-                </p>
-              </>
-            )}
+            <p className="text-gray-600">
+              Total Paid:{" "}
+              <span className="text-green-600 font-bold">$12,500</span>
+            </p>
+            <p className="text-gray-600">
+              Outstanding:{" "}
+              <span className="text-red-600 font-bold">$3,200</span>
+            </p>
           </motion.div>
 
           {/* Shipment Status Breakdown Chart */}
@@ -158,13 +176,46 @@ const Dashboard = () => {
             transition={{ duration: 1 }}
           >
             <h3 className="text-lg font-semibold">Shipment Status Breakdown</h3>
-            {loading ? (
-              <div className="animate-pulse bg-gray-300 h-32 w-full rounded"></div>
-            ) : (
-              <Pie data={shipmentChartData} />
-            )}
+            <Pie data={shipmentChartData} />
           </motion.div>
         </div>
+
+        {/* Row 4 - Live Shipment Tracking Table */}
+        <motion.div
+          className="bg-white p-6 rounded-lg shadow-md mt-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h3 className="text-lg font-semibold mb-4">Live Shipment Tracking</h3>
+
+          {shipments.length === 0 ? (
+            <p className="text-gray-500">No shipments found.</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border border-gray-200">
+                <thead>
+                  <tr className="bg-gray-200 text-gray-700">
+                    <th className="px-4 py-2">Tracking #</th>
+                    <th className="px-4 py-2">Origin</th>
+                    <th className="px-4 py-2">Destination</th>
+                    <th className="px-4 py-2">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {shipments.map((shipment) => (
+                    <tr key={shipment.id} className="border-t border-gray-300">
+                      <td className="px-4 py-2">{shipment.trackingNumber}</td>
+                      <td className="px-4 py-2">{shipment.origin}</td>
+                      <td className="px-4 py-2">{shipment.destination}</td>
+                      <td className="px-4 py-2">{shipment.status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </motion.div>
       </main>
     </div>
   );
