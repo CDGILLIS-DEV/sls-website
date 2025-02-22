@@ -1,12 +1,12 @@
 /* eslint-disable */
 "use client";
 import { useState, useEffect } from "react";
-import Sidebar from "../../components/Sidebar";
+import Sidebar from "../components/Sidebar";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import { db, addShipment } from "lib/firebase";
+import { db } from "lib/firebase";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -28,10 +28,6 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [shipments, setShipments] = useState<Shipment[]>([]);
   const [balances, setBalances] = useState({ paid: 0, owed: 0 });
-  const [origin, setOrigin] = useState("");
-  const [destination, setDestination] = useState("");
-  const [weight, setWeight] = useState("");
-  const [bookingLoading, setBookingLoading] = useState(false);
 
   // Fetch user's shipments from Firestore
   useEffect(() => {
@@ -73,37 +69,10 @@ const Dashboard = () => {
     datasets: [
       {
         data: Object.values(shipmentStats),
-        backgroundColor: ["#FBBF24", "#4F46E5", "#10B981", "#EF4444"],
+        backgroundColor: ["#FBBF24", "#4F46E5", "#10B981", "#EF4444"], // Matching colors
         hoverOffset: 6,
       },
     ],
-  };
-
-  // Handle Shipment Booking
-  const handleBooking = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!user) {
-      toast.error("You must be logged in to book a shipment.");
-      return;
-    }
-
-    const shipmentData = {
-      trackingNumber: `SLS-${Date.now()}`,
-      status: "Pending",
-      origin,
-      destination,
-      weight,
-    };
-
-    try {
-      await addShipment(shipmentData, user.uid);
-      toast.success("Shipment booked successfully!");
-      setOrigin("");
-      setDestination("");
-      setWeight("");
-    } catch (error) {
-      toast.error("Error booking shipment.");
-    }
   };
 
   return (
@@ -133,18 +102,18 @@ const Dashboard = () => {
         {/* Row 2: Shipment Booking */}
         <motion.div className="bg-white p-6 rounded-lg shadow-md my-6">
           <h3 className="text-lg font-semibold mb-4">Book a Shipment</h3>
-          <form onSubmit={handleBooking}>
+          <form>
             <div className="mb-4">
               <label className="block text-gray-700">Origin</label>
-              <input type="text" className="w-full p-2 border rounded" value={origin} onChange={(e) => setOrigin(e.target.value)} required />
+              <input type="text" className="w-full p-2 border rounded" required />
             </div>
             <div className="mb-4">
               <label className="block text-gray-700">Destination</label>
-              <input type="text" className="w-full p-2 border rounded" value={destination} onChange={(e) => setDestination(e.target.value)} required />
+              <input type="text" className="w-full p-2 border rounded" required />
             </div>
             <div className="mb-4">
               <label className="block text-gray-700">Weight (lbs)</label>
-              <input type="number" className="w-full p-2 border rounded" value={weight} onChange={(e) => setWeight(e.target.value)} required />
+              <input type="number" className="w-full p-2 border rounded" required />
             </div>
             <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all">
               Book Shipment
@@ -157,10 +126,22 @@ const Dashboard = () => {
           {/* Shipment Status Card */}
           <motion.div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-lg font-semibold mb-4">Shipment Status Overview</h3>
-            <p className="text-3xl font-bold text-yellow-500">{shipmentStats.pending} <span className="text-lg">Pending</span></p>
-            <p className="text-3xl font-bold text-blue-600">{shipmentStats.inTransit} <span className="text-lg">In Transit</span></p>
-            <p className="text-3xl font-bold text-green-600">{shipmentStats.completed} <span className="text-lg">Completed</span></p>
-            <p className="text-3xl font-bold text-red-600">{shipmentStats.canceled} <span className="text-lg">Canceled</span></p>
+            <p className="text-md flex items-center">
+              <span className="text-3xl font-bold text-yellow-500">{shipmentStats.pending}</span>
+              <span className="ml-2 text-gray-700">Pending</span>
+            </p>
+            <p className="text-md flex items-center">
+              <span className="text-3xl font-bold text-blue-600">{shipmentStats.inTransit}</span>
+              <span className="ml-2 text-gray-700">In Transit</span>
+            </p>
+            <p className="text-md flex items-center">
+              <span className="text-3xl font-bold text-green-600">{shipmentStats.completed}</span>
+              <span className="ml-2 text-gray-700">Completed</span>
+            </p>
+            <p className="text-md flex items-center">
+              <span className="text-3xl font-bold text-red-600">{shipmentStats.canceled}</span>
+              <span className="ml-2 text-gray-700">Canceled</span>
+            </p>
           </motion.div>
 
           {/* Pie Chart */}
@@ -173,12 +154,18 @@ const Dashboard = () => {
         {/* Row 4: Active Shipments */}
         <motion.div className="bg-white p-6 rounded-lg shadow-md mt-6">
           <h3 className="text-lg font-semibold mb-4">Active Shipments</h3>
-          {loading ? <p>Loading shipments...</p> : shipments.length === 0 ? <p>No active shipments found.</p> : (
+          {loading ? (
+            <p>Loading shipments...</p>
+          ) : shipments.length === 0 ? (
+            <p>No active shipments found.</p>
+          ) : (
             <ul className="space-y-4">
               {shipments.map((shipment) => (
                 <li key={shipment.id} className="p-4 border rounded-lg shadow-sm">
-                  <p className="text-md font-semibold">{shipment.trackingNumber}</p>
-                  <p>Status: {shipment.status}</p>
+                  <p className="text-sm text-gray-500">Tracking: {shipment.trackingNumber}</p>
+                  <p className="text-md font-semibold">Status: {shipment.status}</p>
+                  <p className="text-md">From: {shipment.origin}</p>
+                  <p className="text-md">To: {shipment.destination}</p>
                 </li>
               ))}
             </ul>
