@@ -7,7 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import { db } from "lib/firebase";
-import { collection, query, where, onSnapshot, addDoc } from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import toast, { Toaster } from "react-hot-toast";
 
 // Register required chart elements
@@ -28,10 +28,6 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [shipments, setShipments] = useState<Shipment[]>([]);
   const [balances, setBalances] = useState({ paid: 0, owed: 0 });
-  const [origin, setOrigin] = useState("");
-  const [destination, setDestination] = useState("");
-  const [weight, setWeight] = useState("");
-  const [bookingLoading, setBookingLoading] = useState(false);
 
   // Fetch user's shipments from Firestore
   useEffect(() => {
@@ -59,50 +55,24 @@ const Dashboard = () => {
     return () => unsubscribe();
   }, [user]);
 
-  // Shipment Status Chart Data
+  // Shipment Status Data
   const shipmentStats = {
-    inTransit: shipments.filter((s) => s.status === "In Transit").length,
-    delivered: shipments.filter((s) => s.status === "Delivered").length,
     pending: shipments.filter((s) => s.status === "Pending").length,
+    inTransit: shipments.filter((s) => s.status === "In Transit").length,
+    completed: shipments.filter((s) => s.status === "Delivered").length,
     canceled: shipments.filter((s) => s.status === "Canceled").length,
   };
 
+  // Pie Chart Data
   const shipmentChartData = {
-    labels: ["In Transit", "Delivered", "Pending", "Canceled"],
+    labels: ["Pending", "In Transit", "Completed", "Canceled"],
     datasets: [
       {
         data: Object.values(shipmentStats),
-        backgroundColor: ["#4F46E5", "#10B981", "#FBBF24", "#EF4444"],
+        backgroundColor: ["#FBBF24", "#4F46E5", "#10B981", "#EF4444"], // Matching colors
         hoverOffset: 6,
       },
     ],
-  };
-
-  // Handle Shipment Booking
-  const handleBooking = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setBookingLoading(true);
-
-    try {
-      await addDoc(collection(db, "shipments"), {
-        userId: user?.uid,
-        trackingNumber: `SLS-${Date.now()}`,
-        status: "Pending",
-        origin,
-        destination,
-        weight,
-        dateBooked: new Date().toISOString(),
-      });
-
-      setBookingLoading(false);
-      toast.success("Shipment booked successfully!");
-      setOrigin("");
-      setDestination("");
-      setWeight("");
-    } catch (error) {
-      console.error("Error booking shipment:", error);
-      setBookingLoading(false);
-    }
   };
 
   return (
@@ -129,49 +99,57 @@ const Dashboard = () => {
           </motion.div>
         </div>
 
-        {/* Row 2: Booking Form */}
+        {/* Row 2: Shipment Booking */}
         <motion.div className="bg-white p-6 rounded-lg shadow-md my-6">
           <h3 className="text-lg font-semibold mb-4">Book a Shipment</h3>
-          <form onSubmit={handleBooking}>
+          <form>
             <div className="mb-4">
               <label className="block text-gray-700">Origin</label>
-              <input type="text" className="w-full p-2 border rounded" value={origin} onChange={(e) => setOrigin(e.target.value)} required />
+              <input type="text" className="w-full p-2 border rounded" required />
             </div>
             <div className="mb-4">
               <label className="block text-gray-700">Destination</label>
-              <input type="text" className="w-full p-2 border rounded" value={destination} onChange={(e) => setDestination(e.target.value)} required />
+              <input type="text" className="w-full p-2 border rounded" required />
             </div>
             <div className="mb-4">
               <label className="block text-gray-700">Weight (lbs)</label>
-              <input type="number" className="w-full p-2 border rounded" value={weight} onChange={(e) => setWeight(e.target.value)} required />
+              <input type="number" className="w-full p-2 border rounded" required />
             </div>
-            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all" disabled={bookingLoading}>
-              {bookingLoading ? "Booking..." : "Book Shipment"}
+            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all">
+              Book Shipment
             </button>
           </form>
         </motion.div>
 
-        {/* Row 3: Active Shipments */}
-        <motion.div className="bg-white p-6 rounded-lg shadow-md my-6">
-          <h3 className="text-lg font-semibold mb-4">Booking Details</h3>
-          {loading ? (
-            <p>Loading bookings...</p>
-          ) : shipments.length === 0 ? (
-            <p>No shipments booked yet.</p>
-          ) : (
-            <ul className="space-y-4">
-              {shipments.map((shipment) => (
-                <li key={shipment.id} className="p-4 border rounded-lg shadow-sm">
-                  <p className="text-sm text-gray-500">Tracking: {shipment.trackingNumber}</p>
-                  <p className="text-md font-semibold">Status: {shipment.status}</p>
-                  <p className="text-md">From: {shipment.origin}</p>
-                  <p className="text-md">To: {shipment.destination}</p>
-                  <p className="text-sm text-gray-500">Weight: {shipment.weight} lbs</p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </motion.div>
+        {/* Row 3: Shipment Status & Pie Chart */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+          {/* Shipment Status Card */}
+          <motion.div className="bg-white p-6 rounded-lg shadow-md">
+            <h3 className="text-lg font-semibold mb-4">Shipment Status Overview</h3>
+            <p className="text-md flex items-center">
+              <span className="text-3xl font-bold text-yellow-500">{shipmentStats.pending}</span>
+              <span className="ml-2 text-gray-700">Pending</span>
+            </p>
+            <p className="text-md flex items-center">
+              <span className="text-3xl font-bold text-blue-600">{shipmentStats.inTransit}</span>
+              <span className="ml-2 text-gray-700">In Transit</span>
+            </p>
+            <p className="text-md flex items-center">
+              <span className="text-3xl font-bold text-green-600">{shipmentStats.completed}</span>
+              <span className="ml-2 text-gray-700">Completed</span>
+            </p>
+            <p className="text-md flex items-center">
+              <span className="text-3xl font-bold text-red-600">{shipmentStats.canceled}</span>
+              <span className="ml-2 text-gray-700">Canceled</span>
+            </p>
+          </motion.div>
+
+          {/* Pie Chart */}
+          <motion.div className="bg-white p-6 rounded-lg shadow-md">
+            <h3 className="text-lg font-semibold mb-4">Shipment Status Breakdown</h3>
+            {loading ? <p>Loading chart...</p> : <Pie data={shipmentChartData} />}
+          </motion.div>
+        </div>
       </main>
     </div>
   );
