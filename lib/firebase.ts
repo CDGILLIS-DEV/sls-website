@@ -1,24 +1,10 @@
 /* eslint-disable */
 "use client";
-// Import the necessary Firebase SDKs
 import { initializeApp } from "firebase/app";
-import { 
-  getAuth, 
-  GoogleAuthProvider, 
-  signInWithPopup, 
-  createUserWithEmailAndPassword 
-} from "firebase/auth";
-import { 
-  getFirestore, 
-  doc, 
-  setDoc, 
-  collection, 
-  getDocs, 
-  addDoc, 
-  DocumentData
-} from "firebase/firestore";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getFirestore, doc, setDoc, collection, addDoc } from "firebase/firestore";
 
-// Firebase configuration (Loaded from environment variables)
+// Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -28,60 +14,21 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase App
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app); // Initialize Firestore instance
+const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
-interface Shipment {
-  id?: string; // Firstone will auto-generate an ID if not provided
-  trackingNumber: string;
-  status: string;
-  origin: string;
-  destination: string;
-  updatedAt: string;
-}
-
-// Function to Sign in with Google & Store User in Firestore
-export const signInWithGoogle = async () => {
+// Function to Add a Shipment
+export const addShipment = async (shipmentData: any, userId: string) => {
   try {
-    const result = await signInWithPopup(auth, googleProvider);
-    const user = result.user;
-
-    // Store user data in Firestore
-    await setDoc(doc(db, "users", user.uid), {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName || "",
-      photoURL: user.photoURL || "",
-      createdAt: new Date(),
-      role: "customer", // Default role
+    await addDoc(collection(db, "shipments"), {
+      ...shipmentData,
+      userId, // Ensures only this user can see their shipments
+      dateBooked: new Date().toISOString(),
     });
 
-    return user;
-  } catch (error) {
-    console.error("Google Sign-in Error:", error);
-  }
-};
-
-// Function to Fetch Shipments from Firestore (Used in Dashboard)
-export const getShipments = async () => {
-  try {
-    const shipmentCollection = collection(db, "shipments");
-    const snapshot = await getDocs(shipmentCollection);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  } catch (error) {
-    console.error("Error fetching shipments:", error);
-    return [];
-  }
-};
-
-// Function to Add a Shipment Manually (For Testing Manual Updates)
-export const addShipment = async (shipmentData: Shipment) => {
-  try {
-    const shipmentCollection = collection(db, "shipments");
-    await addDoc(shipmentCollection, shipmentData);
     console.log("Shipment added successfully!");
   } catch (error) {
     console.error("Error adding shipment:", error);
