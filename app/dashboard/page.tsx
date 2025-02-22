@@ -150,6 +150,27 @@ const Dashboard = () => {
             {loading ? <p>Loading chart...</p> : <Pie data={shipmentChartData} />}
           </motion.div>
         </div>
+
+        {/* Row 4: Active Shipments */}
+        <motion.div className="bg-white p-6 rounded-lg shadow-md mt-6">
+          <h3 className="text-lg font-semibold mb-4">Active Shipments</h3>
+          {loading ? (
+            <p>Loading shipments...</p>
+          ) : shipments.length === 0 ? (
+            <p>No active shipments found.</p>
+          ) : (
+            <ul className="space-y-4">
+              {shipments.map((shipment) => (
+                <li key={shipment.id} className="p-4 border rounded-lg shadow-sm">
+                  <p className="text-sm text-gray-500">Tracking: {shipment.trackingNumber}</p>
+                  <p className="text-md font-semibold">Status: {shipment.status}</p>
+                  <p className="text-md">From: {shipment.origin}</p>
+                  <p className="text-md">To: {shipment.destination}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </motion.div>
       </main>
     </div>
   );
