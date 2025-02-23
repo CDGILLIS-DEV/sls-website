@@ -114,12 +114,22 @@ const Dashboard = () => {
 
         {/* Row 1: Welcome & Financial Summary */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <motion.div className="bg-white p-6 rounded-lg shadow-md">
+          <motion.div 
+            className="bg-white p-6 rounded-lg shadow-md"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
             <h2 className="text-xl font-bold">Welcome, {user?.displayName || "User"}!</h2>
             <p className="text-gray-600">Your dashboard overview.</p>
           </motion.div>
 
-          <motion.div className="bg-white p-6 rounded-lg shadow-md">
+          <motion.div 
+            className="bg-white p-6 rounded-lg shadow-md"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             <h3 className="text-lg font-semibold">Financial Summary</h3>
             <p className="text-gray-600">
               Total Paid: <span className="text-green-600 font-bold">${balances.paid.toFixed(2)}</span>
@@ -131,7 +141,13 @@ const Dashboard = () => {
         </div>
 
         {/* Row 2: Shipment Booking */}
-        <motion.div className="bg-white p-6 rounded-lg shadow-md my-6">
+        <motion.div 
+          className="bg-white p-6 rounded-lg shadow-md my-6"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          whileHover={{ scale: 1.02 }}
+        >
           <h3 className="text-lg font-semibold mb-4">Book a Shipment</h3>
           <form onSubmit={handleBooking}>
             <div className="mb-4">
@@ -154,8 +170,12 @@ const Dashboard = () => {
 
         {/* Row 3: Shipment Status & Pie Chart */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          {/* Shipment Status Card */}
-          <motion.div className="bg-white p-6 rounded-lg shadow-md">
+          <motion.div 
+            className="bg-white p-6 rounded-lg shadow-md"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
             <h3 className="text-lg font-semibold mb-4">Shipment Status Overview</h3>
             <p className="text-3xl font-bold text-yellow-500">{shipmentStats.pending} <span className="text-lg">Pending</span></p>
             <p className="text-3xl font-bold text-blue-600">{shipmentStats.inTransit} <span className="text-lg">In Transit</span></p>
@@ -163,33 +183,49 @@ const Dashboard = () => {
             <p className="text-3xl font-bold text-red-600">{shipmentStats.canceled} <span className="text-lg">Canceled</span></p>
           </motion.div>
 
-          {/* Pie Chart */}
-          <motion.div className="bg-white p-6 rounded-lg shadow-md">
+          <motion.div 
+            className="bg-white p-6 rounded-lg shadow-md"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
             <h3 className="text-lg font-semibold mb-4">Shipment Status Breakdown</h3>
             {loading ? <p>Loading chart...</p> : <Pie data={shipmentChartData} />}
           </motion.div>
         </div>
 
-          {/* Row 4: Active Shipments */}
-          <motion.div className="bg-white p-6 rounded-lg shadow-md mt-6">
-            <h3 className="text-lg font-semibold mb-4">Active Shipments</h3>
-            {loading ? (
-              <p>Loading shipments...</p>
-            ) : shipments.length === 0 ? (
-              <p>No active shipments found.</p>
-            ) : (
-              <ul className="space-y-4">
-                {shipments.map((shipment) => (
-                  <li key={shipment.id} className="p-4 border rounded-lg shadow-sm">
-                    <p className="text-md font-semibold text-blue-600">Tracking: {shipment.trackingNumber}</p>
-                    <p className="text-md">Status: <span className="font-semibold">{shipment.status}</span></p>
-                    <p className="text-md">Origin: <span className="font-semibold">{shipment.origin}</span></p>
-                    <p className="text-md">Destination: <span className="font-semibold">{shipment.destination}</span></p>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </motion.div>
+        {/* Row 4: Active Shipments */}
+        <motion.div 
+          className="bg-white p-6 rounded-lg shadow-md mt-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h3 className="text-lg font-semibold mb-4">Active Shipments</h3>
+          {loading ? (
+            <p>Loading shipments...</p>
+          ) : shipments.length === 0 ? (
+            <p>No active shipments found.</p>
+          ) : (
+            <ul className="space-y-4">
+              {shipments.map((shipment) => (
+                <motion.li 
+                  key={shipment.id} 
+                  className="p-4 border rounded-lg shadow-sm"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <p className="text-md font-semibold text-blue-600">Tracking: {shipment.trackingNumber}</p>
+                  <p className="text-md">Status: <span className="font-semibold">{shipment.status}</span></p>
+                  <p className="text-md">Origin: <span className="font-semibold">{shipment.origin}</span></p>
+                  <p className="text-md">Destination: <span className="font-semibold">{shipment.destination}</span></p>
+                </motion.li>
+              ))}
+            </ul>
+          )}
+        </motion.div>
       </main>
     </div>
   );
