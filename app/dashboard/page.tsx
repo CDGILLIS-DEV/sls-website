@@ -170,20 +170,26 @@ const Dashboard = () => {
           </motion.div>
         </div>
 
-        {/* Row 4: Active Shipments */}
-        <motion.div className="bg-white p-6 rounded-lg shadow-md mt-6">
-          <h3 className="text-lg font-semibold mb-4">Active Shipments</h3>
-          {loading ? <p>Loading shipments...</p> : shipments.length === 0 ? <p>No active shipments found.</p> : (
-            <ul className="space-y-4">
-              {shipments.map((shipment) => (
-                <li key={shipment.id} className="p-4 border rounded-lg shadow-sm">
-                  <p className="text-md font-semibold">{shipment.trackingNumber}</p>
-                  <p>Status: {shipment.status}</p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </motion.div>
+          {/* Row 4: Active Shipments */}
+          <motion.div className="bg-white p-6 rounded-lg shadow-md mt-6">
+            <h3 className="text-lg font-semibold mb-4">Active Shipments</h3>
+            {loading ? (
+              <p>Loading shipments...</p>
+            ) : shipments.length === 0 ? (
+              <p>No active shipments found.</p>
+            ) : (
+              <ul className="space-y-4">
+                {shipments.map((shipment) => (
+                  <li key={shipment.id} className="p-4 border rounded-lg shadow-sm">
+                    <p className="text-md font-semibold text-blue-600">Tracking: {shipment.trackingNumber}</p>
+                    <p className="text-md">Status: <span className="font-semibold">{shipment.status}</span></p>
+                    <p className="text-md">Origin: <span className="font-semibold">{shipment.origin}</span></p>
+                    <p className="text-md">Destination: <span className="font-semibold">{shipment.destination}</span></p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </motion.div>
       </main>
     </div>
   );
