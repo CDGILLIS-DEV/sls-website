@@ -107,7 +107,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex bg-gray-100 min-h-screen">
+    <div className="flex bg-gradient-to-r from-gray-100 via-white to-gray-100 animate-gradient min-h-screen">
       <Sidebar />
       <main className="flex-1 p-6">
         <Toaster position="top-right" />
@@ -118,7 +118,7 @@ const Dashboard = () => {
             className="bg-white p-6 rounded-lg shadow-md"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
           >
             <h2 className="text-xl font-bold">Welcome, {user?.displayName || "User"}!</h2>
             <p className="text-gray-600">Your dashboard overview.</p>
@@ -174,7 +174,7 @@ const Dashboard = () => {
             className="bg-white p-6 rounded-lg shadow-md"
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.5, delay:0.2 }}
           >
             <h3 className="text-lg font-semibold mb-4">Shipment Status Overview</h3>
             <p className="text-3xl font-bold text-yellow-500">{shipmentStats.pending} <span className="text-lg">Pending</span></p>
@@ -185,8 +185,8 @@ const Dashboard = () => {
 
           <motion.div 
             className="bg-white p-6 rounded-lg shadow-md"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: 50, scale: 0.8 }}
+            animate={{ opacity: 1, x: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <h3 className="text-lg font-semibold mb-4">Shipment Status Breakdown</h3>

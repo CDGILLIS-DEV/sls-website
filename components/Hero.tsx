@@ -26,7 +26,7 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          Welcome to Simpatico Logistics
+          Simpatico Logistics Services
         </motion.h1>
         <motion.p 
           className="text-gray-200 text-lg md:text-xl mt-4"
