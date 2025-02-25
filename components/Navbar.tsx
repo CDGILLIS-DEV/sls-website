@@ -120,11 +120,11 @@ const Navbar = () => {
           )}
 
           <Link href="/rate-estimator" className="cursor-pointer text-dark hover:text-primary transition-all" onClick={closeMenu}>
-            Quote
+            QUOTE
           </Link>
 
           <Link href="/book-load" className="cursor-pointer text-dark hover:text-primary transition-all" onClick={closeMenu}>
-            Booking
+            BOOKING
           </Link>
 
           {/* Authentication Links */}
@@ -156,7 +156,7 @@ const Navbar = () => {
                 onClick={() => router.push("/signup")}
                 className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-all"
               >
-                Sign Up
+                Create Account
               </button>
             </>
           )}
@@ -281,7 +281,7 @@ const Navbar = () => {
                 onClick={() => router?.push("/signup")}
                 className="block w-full text-left px-6 py-2 text-green-600 hover:bg-green-100"
               >
-                Sign Up
+                Create Account
               </button>
             </>
           )}

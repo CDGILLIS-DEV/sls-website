@@ -21,7 +21,7 @@ const handleSubmit = (e: React.FormEvent) => {
 
     // Rate Calculation
     const baseRate = 50; // Flat fee
-    const costPerMile = 1.9; // $1.90 per mile
+    const costPerMile = 2.9; // $1.90 per mile
     const costPerPound = 0.01; // $0.01 per pound
 
     const distance = parseFloat(formData.distance);
@@ -91,6 +91,7 @@ return (
                 <p className="text-2xl text-primary">${rate.toFixed(2)}</p>
             </div>
         )}
+        <p>NOTE: This is just an estimation of shipping costs. Actual rate quotes vary and are given over the phone.</p>
     </div>
   );
 };
