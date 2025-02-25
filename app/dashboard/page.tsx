@@ -7,8 +7,8 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import { db, addShipment } from "lib/firebase";
-import { collection, query, where, onSnapshot, doc, getDoc } from "firebase/firestore";
+import { db, saveUserToFirestore } from "lib/firebase";
+import { collection, query, where, onSnapshot, doc, getDoc, addDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -44,18 +44,27 @@ const Dashboard = () => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (!currentUser) {
         router.push("/login");
-      } else if (!currentUser.emailVerified) {
-        router.push("/verify-email");
-      } else {
-        setIsVerified(true);
-        const profileRef = doc(db, "companies", currentUser.uid);
-        const profileSnap = await getDoc(profileRef);
-        if (profileSnap.exists()) {
-          setHasProfile(true);
-        } else {
-          router.push("/create-profile");
-        }
+        return;
       }
+
+      if (!currentUser.emailVerified) {
+        router.push("/verify-email");
+        return;
+      }
+
+      setIsVerified(true);
+
+      // Check if profile exists
+      const profileRef = doc(db, "companies", currentUser.uid);
+      const profileSnap = await getDoc(profileRef);
+      if (profileSnap.exists()) {
+        setHasProfile(true);
+      } else {
+        router.push("/create-profile");
+      }
+
+      // Save user to Firestore after verification
+      await saveUserToFirestore(currentUser);
       setLoading(false);
     });
 
@@ -94,7 +103,7 @@ const Dashboard = () => {
     completed: shipments.filter((s) => s.status === "Delivered").length,
     canceled: shipments.filter((s) => s.status === "Canceled").length,
   };
-  
+
   // Pie Chart Data
   const shipmentChartData = {
     labels: ["Pending", "In Transit", "Completed", "Canceled"],
@@ -105,9 +114,42 @@ const Dashboard = () => {
         hoverOffset: 6,
       },
     ],
-  };  
+  };
 
-  if (loading || !isVerified || !hasProfile) return <p>Loading...</p>;
+  // Handle Shipment Booking
+  const handleBooking = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!user) {
+      toast.error("You must be logged in to book a shipment.");
+      return;
+    }
+
+    setBookingLoading(true);
+
+    const shipmentData = {
+      trackingNumber: `SLS-${Date.now()}`,
+      status: "Pending",
+      origin,
+      destination,
+      weight,
+      userId: user.uid,
+      dateBooked: new Date().toISOString(),
+    };
+
+    try {
+      await addDoc(collection(db, "shipments"), shipmentData);
+      toast.success("Shipment booked successfully!");
+      setOrigin("");
+      setDestination("");
+      setWeight("");
+    } catch (error) {
+      toast.error("Error booking shipment.");
+    }
+
+    setBookingLoading(false);
+  };
+
+  if (loading || !isVerified || !hasProfile)
 
   return (
     <div className="flex bg-gradient-to-r from-gray-100 via-white to-gray-100 animate-gradient min-h-screen">
@@ -117,33 +159,19 @@ const Dashboard = () => {
 
         {/* Row 1: Welcome & Financial Summary */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <motion.div 
-            className="bg-white p-6 rounded-lg shadow-md"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
+          <motion.div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-bold">Welcome, {user?.displayName || "User"}!</h2>
             <p className="text-gray-600">Your dashboard overview.</p>
           </motion.div>
 
-          <motion.div 
-            className="bg-white p-6 rounded-lg shadow-md"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
+          <motion.div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-lg font-semibold">Financial Summary</h3>
-            <p className="text-gray-600">
-              Total Paid: <span className="text-green-600 font-bold">${balances.paid.toFixed(2)}</span>
-            </p>
-            <p className="text-gray-600">
-              Total Owed: <span className="text-red-600 font-bold">${balances.owed.toFixed(2)}</span>
-            </p>
+            <p className="text-gray-600">Total Paid: <span className="text-green-600 font-bold">${balances.paid.toFixed(2)}</span></p>
+            <p className="text-gray-600">Total Owed: <span className="text-red-600 font-bold">${balances.owed.toFixed(2)}</span></p>
           </motion.div>
         </div>
 
-        {/* Row 2: Shipment Status & Pie Chart */}
+        {/* Row 2: Shipment Status Overview & Pie Chart */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           <motion.div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-lg font-semibold mb-4">Shipment Status Overview</h3>
@@ -159,31 +187,61 @@ const Dashboard = () => {
           </motion.div>
         </div>
 
+        {/* Row 3: Book Shipment Form */}
+        <motion.div className="bg-white p-6 rounded-lg shadow-md my-6">
+          <h3 className="text-lg font-semibold mb-4">Book a Shipment</h3>
+          <form onSubmit={handleBooking} className="space-y-4">
+            <div>
+              <label className="block text-gray-700 font-semibold">Origin</label>
+              <input
+                type="text"
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                value={origin}
+                onChange={(e) => setOrigin(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 font-semibold">Destination</label>
+              <input
+                type="text"
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 font-semibold">Weight (lbs)</label>
+              <input
+                type="number"
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                value={weight}
+                onChange={(e) => setWeight(e.target.value)}
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-all font-semibold"
+            >
+              {bookingLoading ? "Booking..." : "Book Shipment"}
+            </button>
+          </form>
+        </motion.div>
+
         {/* Row 3: Active Shipments */}
         <motion.div className="bg-white p-6 rounded-lg shadow-md mt-6">
           <h3 className="text-lg font-semibold mb-4">Active Shipments</h3>
-          {loading ? (
-            <p>Loading shipments...</p>
-          ) : shipments.length === 0 ? (
-            <p>No active shipments found.</p>
-          ) : (
-            <ul className="space-y-4">
-              {shipments.map((shipment) => (
-                <motion.li 
-                  key={shipment.id} 
-                  className="p-4 border rounded-lg shadow-sm"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3 }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <p className="text-md font-semibold text-blue-600">Tracking: {shipment.trackingNumber}</p>
-                  <p className="text-md">Status: <span className="font-semibold">{shipment.status}</span></p>
-                  <p className="text-md">Origin: <span className="font-semibold">{shipment.origin}</span></p>
-                  <p className="text-md">Destination: <span className="font-semibold">{shipment.destination}</span></p>
-                </motion.li>
-              ))}
-            </ul>
+          {shipments.length === 0 ? <p>No active shipments found.</p> : (
+            <ul className="space-y-4">{shipments.map((shipment) => (
+              <li key={shipment.id} className="p-4 border rounded-lg shadow-sm">
+                <p className="text-md font-semibold text-blue-600">Tracking: {shipment.trackingNumber}</p>
+                <p>Status: {shipment.status}</p>
+                <p>Origin: {shipment.origin}</p>
+                <p>Destination: {shipment.destination}</p>
+              </li>
+            ))}</ul>
           )}
         </motion.div>
       </main>

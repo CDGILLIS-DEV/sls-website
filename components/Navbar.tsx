@@ -75,13 +75,13 @@ const Navbar = () => {
                 
               className="cursor-pointer text-dark hover:text-primary transition-all"
             >
-              Services
+              SERVICES
             </button>
           )}
 
 {pathname === "/" ? (
           <ScrollLink to="about" smooth={true} duration={800} className="cursor-pointer text-dark hover:text-primary transition-all" onClick={closeMenu}>
-            About
+            ABOUT
           </ScrollLink>
         ) : (
             <button
@@ -95,13 +95,13 @@ const Navbar = () => {
                 
               className="cursor-pointer text-dark hover:text-primary transition-all"
             >
-              About
+              ABOUT
             </button>
           )}
 
 {pathname === "/" ? (
           <ScrollLink to="contact" smooth={true} duration={800} className="cursor-pointer text-dark hover:text-primary transition-all" onClick={closeMenu}>
-            Contact Us
+            CONTACT US
           </ScrollLink>
         ) : (
             <button
@@ -115,7 +115,7 @@ const Navbar = () => {
                 
               className="cursor-pointer text-dark hover:text-primary transition-all"
             >
-              Contact Us
+              CONTACT US
             </button>
           )}
 
@@ -131,7 +131,7 @@ const Navbar = () => {
           {user ? (
             <>
               <Link href="/dashboard" className="text-dark px-4 py-2 rounded-lg transition-all cursor-pointer">
-                Dashboard
+                DASHBOARD
               </Link>
               <button
                 onClick={() => {
@@ -141,7 +141,7 @@ const Navbar = () => {
                 }}
                 className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all"
               >
-                Logout
+                LOGOUT
               </button>
             </>
           ) : (
@@ -150,13 +150,13 @@ const Navbar = () => {
                 onClick={() => router.push("/login")}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all"
               >
-                Login
+                LOGIN
               </button>
               <button
                 onClick={() => router.push("/signup")}
                 className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-all"
               >
-                Create Account
+                CREATE ACCOUNT
               </button>
             </>
           )}
@@ -181,7 +181,7 @@ const Navbar = () => {
             className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" 
             onClick={closeMenu}
           >
-            Services
+            SERVICES
           </ScrollLink>
         ) : (
           <button
@@ -196,7 +196,7 @@ const Navbar = () => {
             }}
             className="block px-6 py-2 text-dark hover:bg-primary hover:text-white"
           >
-            Services
+            SERVICES
           </button>
         )}
         {pathname === "/" ? (
@@ -207,7 +207,7 @@ const Navbar = () => {
             className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" 
             onClick={closeMenu}
           >
-            About
+            ABOUT
           </ScrollLink>
         ) : (
           <button
@@ -222,7 +222,7 @@ const Navbar = () => {
             }}
             className="block px-6 py-2 text-dark hover:bg-primary hover:text-white"
           >
-            About
+            ABOUT
           </button>
         )}
         {pathname === "/" ? (
@@ -233,7 +233,7 @@ const Navbar = () => {
             className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" 
             onClick={closeMenu}
           >
-            Contact Us
+            CONTACT US
           </ScrollLink>
         ) : (
           <button
@@ -248,7 +248,7 @@ const Navbar = () => {
             }}
             className="block px-6 py-2 text-dark hover:bg-primary hover:text-white"
           >
-            Contact Us
+            CONTACT US
           </button>
         )}
 
@@ -256,7 +256,7 @@ const Navbar = () => {
           {user ? (
             <>
               <Link href="/dashboard" className="block px-6 py-2 text-dark hover:bg-primary hover:text-white" onClick={closeMenu}>
-                Dashboard
+                DASHBOARD
               </Link>
               <button
                 onClick={() => {
@@ -266,7 +266,7 @@ const Navbar = () => {
                 }}
                 className="w-full text-left px-6 py-2 text-red-600 hover:bg-red-100"
               >
-                Logout
+                LOGOUT
               </button>
             </>
           ) : (
@@ -275,13 +275,13 @@ const Navbar = () => {
                 onClick={() => router?.push("/login")}
                 className="block w-full text-left px-6 py-2 text-blue-600 hover:bg-blue-100"
               >
-                Login
+                LOGIN
               </button>
               <button
                 onClick={() => router?.push("/signup")}
                 className="block w-full text-left px-6 py-2 text-green-600 hover:bg-green-100"
               >
-                Create Account
+                CREATE ACCOUNT
               </button>
             </>
           )}
