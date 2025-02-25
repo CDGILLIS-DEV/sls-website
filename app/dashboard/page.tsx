@@ -1,13 +1,15 @@
 /* eslint-disable */
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Sidebar from "../../components/Sidebar";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import { db, addShipment } from "lib/firebase";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { collection, query, where, onSnapshot, doc, getDoc } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
 
 // Register required chart elements
@@ -25,6 +27,8 @@ interface Shipment {
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const auth = getAuth();
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [shipments, setShipments] = useState<Shipment[]>([]);
   const [balances, setBalances] = useState({ paid: 0, owed: 0 });
@@ -32,6 +36,31 @@ const Dashboard = () => {
   const [destination, setDestination] = useState("");
   const [weight, setWeight] = useState("");
   const [bookingLoading, setBookingLoading] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+  const [hasProfile, setHasProfile] = useState(false);
+
+  // Check authentication, email verification, and profile completion
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (!currentUser) {
+        router.push("/login");
+      } else if (!currentUser.emailVerified) {
+        router.push("/verify-email");
+      } else {
+        setIsVerified(true);
+        const profileRef = doc(db, "companies", currentUser.uid);
+        const profileSnap = await getDoc(profileRef);
+        if (profileSnap.exists()) {
+          setHasProfile(true);
+        } else {
+          router.push("/create-profile");
+        }
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [auth, router]);
 
   // Fetch user's shipments from Firestore
   useEffect(() => {
@@ -59,14 +88,13 @@ const Dashboard = () => {
     return () => unsubscribe();
   }, [user]);
 
-  // Shipment Status Data
   const shipmentStats = {
     pending: shipments.filter((s) => s.status === "Pending").length,
     inTransit: shipments.filter((s) => s.status === "In Transit").length,
     completed: shipments.filter((s) => s.status === "Delivered").length,
     canceled: shipments.filter((s) => s.status === "Canceled").length,
   };
-
+  
   // Pie Chart Data
   const shipmentChartData = {
     labels: ["Pending", "In Transit", "Completed", "Canceled"],
@@ -77,34 +105,9 @@ const Dashboard = () => {
         hoverOffset: 6,
       },
     ],
-  };
+  };  
 
-  // Handle Shipment Booking
-  const handleBooking = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!user) {
-      toast.error("You must be logged in to book a shipment.");
-      return;
-    }
-
-    const shipmentData = {
-      trackingNumber: `SLS-${Date.now()}`,
-      status: "Pending",
-      origin,
-      destination,
-      weight,
-    };
-
-    try {
-      await addShipment(shipmentData, user.uid);
-      toast.success("Shipment booked successfully!");
-      setOrigin("");
-      setDestination("");
-      setWeight("");
-    } catch (error) {
-      toast.error("Error booking shipment.");
-    }
-  };
+  if (loading || !isVerified || !hasProfile) return <p>Loading...</p>;
 
   return (
     <div className="flex bg-gradient-to-r from-gray-100 via-white to-gray-100 animate-gradient min-h-screen">
@@ -140,67 +143,24 @@ const Dashboard = () => {
           </motion.div>
         </div>
 
-        {/* Row 2: Shipment Booking */}
-        <motion.div 
-          className="bg-white p-6 rounded-lg shadow-md my-6"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          whileHover={{ scale: 1.02 }}
-        >
-          <h3 className="text-lg font-semibold mb-4">Book a Shipment</h3>
-          <form onSubmit={handleBooking}>
-            <div className="mb-4">
-              <label className="block text-gray-700">Origin</label>
-              <input type="text" className="w-full p-2 border rounded" value={origin} onChange={(e) => setOrigin(e.target.value)} required />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Destination</label>
-              <input type="text" className="w-full p-2 border rounded" value={destination} onChange={(e) => setDestination(e.target.value)} required />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Weight (lbs)</label>
-              <input type="number" className="w-full p-2 border rounded" value={weight} onChange={(e) => setWeight(e.target.value)} required />
-            </div>
-            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all">
-              Book Shipment
-            </button>
-          </form>
-        </motion.div>
-
-        {/* Row 3: Shipment Status & Pie Chart */}
+        {/* Row 2: Shipment Status & Pie Chart */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          <motion.div 
-            className="bg-white p-6 rounded-lg shadow-md"
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay:0.2 }}
-          >
+          <motion.div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-lg font-semibold mb-4">Shipment Status Overview</h3>
-            <p className="text-3xl font-bold text-yellow-500">{shipmentStats.pending} <span className="text-lg">Pending</span></p>
-            <p className="text-3xl font-bold text-blue-600">{shipmentStats.inTransit} <span className="text-lg">In Transit</span></p>
-            <p className="text-3xl font-bold text-green-600">{shipmentStats.completed} <span className="text-lg">Completed</span></p>
-            <p className="text-3xl font-bold text-red-600">{shipmentStats.canceled} <span className="text-lg">Canceled</span></p>
+            <p className="text-3xl font-bold text-yellow-500">{shipmentStats.pending} Pending</p>
+            <p className="text-3xl font-bold text-blue-600">{shipmentStats.inTransit} In Transit</p>
+            <p className="text-3xl font-bold text-green-600">{shipmentStats.completed} Completed</p>
+            <p className="text-3xl font-bold text-red-600">{shipmentStats.canceled} Canceled</p>
           </motion.div>
 
-          <motion.div 
-            className="bg-white p-6 rounded-lg shadow-md"
-            initial={{ opacity: 0, x: 50, scale: 0.8 }}
-            animate={{ opacity: 1, x: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
+          <motion.div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-lg font-semibold mb-4">Shipment Status Breakdown</h3>
             {loading ? <p>Loading chart...</p> : <Pie data={shipmentChartData} />}
           </motion.div>
         </div>
 
-        {/* Row 4: Active Shipments */}
-        <motion.div 
-          className="bg-white p-6 rounded-lg shadow-md mt-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+        {/* Row 3: Active Shipments */}
+        <motion.div className="bg-white p-6 rounded-lg shadow-md mt-6">
           <h3 className="text-lg font-semibold mb-4">Active Shipments</h3>
           {loading ? (
             <p>Loading shipments...</p>
