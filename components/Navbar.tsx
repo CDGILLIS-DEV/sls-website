@@ -61,7 +61,7 @@ const Navbar = () => {
         <div className="hidden md:flex space-x-6 items-center">
           {pathname === "/" ? (
           <ScrollLink to="services" smooth={true} duration={800} className="cursor-pointer text-dark hover:text-primary transition-all" onClick={closeMenu}>
-            Services
+            SERVICES
           </ScrollLink>
         ) : (
             <button
@@ -214,6 +214,7 @@ const Navbar = () => {
             onClick={() => {
               setIsOpen(false); // Close mobile menu
               setTimeout(() => {
+
                 router.push("/");
                 setTimeout(() => {
                   document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
