@@ -72,7 +72,7 @@ export default function LeadForm() {
                 </div>
 
                 <div>
-                    <label className="text-sm text-gray-600"></label> 
+                    <label className="text-sm text-gray-600">Contact Name</label> 
                     <input
                     type="text"
                     name="contactName"
@@ -84,7 +84,7 @@ export default function LeadForm() {
                 </div>
 
                 <div>
-                    <label className="text-sm text-gray-600"></label> 
+                    <label className="text-sm text-gray-600">Email</label> 
                     <input
                     type="email"
                     name="email"
@@ -96,7 +96,7 @@ export default function LeadForm() {
                 </div>                
 
                 <div>
-                    <label className="text-sm text-gray-600"></label> 
+                    <label className="text-sm text-gray-600">Product Type</label> 
                     <input
                     type="text"
                     name="productType"
@@ -109,7 +109,7 @@ export default function LeadForm() {
               </div>
 
               <div>
-                <label className="text-sm text-gray-600"></label>
+                <label className="text-sm text-gray-600">Notes</label>
                 <textarea
                 name="notes"
                 placeholder="Notes"
