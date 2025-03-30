@@ -63,34 +63,50 @@ export default function LeadForm() {
 
             <input
             type="text"
-            name="companyName"
-            placeholder="Company Name"
+            name="contactName"
+            placeholder="Contact Name"
             className="w-full p-2 border rounded"
-            value={formData.companyName}
+            value={formData.contactName}
             onChange={handleChange}
-            required
+            />
+
+            <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            className="w-full p-2 border rounded"
+            value={formData.email}
+            onChange={handleChange}
             />
 
             <input
             type="text"
-            name="companyName"
-            placeholder="Company Name"
+            name="productType"
+            placeholder="Product Type"
             className="w-full p-2 border rounded"
-            value={formData.companyName}
+            value={formData.productType}
             onChange={handleChange}
-            required
             />
 
-            <input
-            type="text"
-            name="companyName"
-            placeholder="Company Name"
+            <textarea
+            name="notes"
+            placeholder="Notes"
             className="w-full p-2 border rounded"
-            value={formData.companyName}
+            value={formData.notes}
             onChange={handleChange}
-            required
             />
             
+            <button
+             type="submit"
+             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+             disabled={loading}
+            >
+               {loading ? "Submitting..." : "Submit Lead"}
+            </button>
+
+            {submitted && (
+                <p className="text-green-600">Lead submitted successfully!</p>
+            )}
         </form>
-    )
+    );
 }
