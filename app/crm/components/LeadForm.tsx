@@ -1,7 +1,9 @@
 "use client";
+
 import { useState } from "react";
 import { db } from "lib/firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { motion } from "framer-motion";
 
 export default function LeadForm() {
     const[formData, setFormData] = useState({
@@ -48,65 +50,96 @@ export default function LeadForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-x1 shadow-md space-y-4">
-            <h2 className="text-x1 font-semibold">Add Manufactuer Lead</h2>
+        <motion.form 
+        onSubmit={handleSubmit} 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="space-y-4"
+        >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label className="text-sm text-gray-600">Company Name</label>
+                    <input
+                    type="text"
+                    name="companyName"
+                    placeholder="Company Name"
+                    className="w-full p-2 border rounded"
+                    value={formData.companyName}
+                    onChange={handleChange}
+                    required
+                    />
+                </div>
 
-            <input
-            type="text"
-            name="companyName"
-            placeholder="Company Name"
-            className="w-full p-2 border rounded"
-            value={formData.companyName}
-            onChange={handleChange}
-            required
-            />
+                <div>
+                    <label className="text-sm text-gray-600"></label> 
+                    <input
+                    type="text"
+                    name="contactName"
+                    placeholder="Contact Name"
+                    className="w-full p-2 border rounded"
+                    value={formData.contactName}
+                    onChange={handleChange}
+                    />
+                </div>
 
-            <input
-            type="text"
-            name="contactName"
-            placeholder="Contact Name"
-            className="w-full p-2 border rounded"
-            value={formData.contactName}
-            onChange={handleChange}
-            />
+                <div>
+                    <label className="text-sm text-gray-600"></label> 
+                    <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    className="w-full p-2 border rounded"
+                    value={formData.email}
+                    onChange={handleChange}
+                    />
+                </div>                
 
-            <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            className="w-full p-2 border rounded"
-            value={formData.email}
-            onChange={handleChange}
-            />
+                <div>
+                    <label className="text-sm text-gray-600"></label> 
+                    <input
+                    type="text"
+                    name="productType"
+                    placeholder="Product Type"
+                    className="w-full p-2 border rounded"
+                    value={formData.productType}
+                    onChange={handleChange}
+                    />
+                </div>
+              </div>
 
-            <input
-            type="text"
-            name="productType"
-            placeholder="Product Type"
-            className="w-full p-2 border rounded"
-            value={formData.productType}
-            onChange={handleChange}
-            />
-
-            <textarea
-            name="notes"
-            placeholder="Notes"
-            className="w-full p-2 border rounded"
-            value={formData.notes}
-            onChange={handleChange}
-            />
-            
+              <div>
+                <label className="text-sm text-gray-600"></label>
+                <textarea
+                name="notes"
+                placeholder="Notes"
+                className="w-full p-2 border rounded"
+                value={formData.notes}
+                onChange={handleChange}
+                />
+              </div>
             <button
              type="submit"
-             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
              disabled={loading}
+             className={`w-full sm:w-auto px-6 py-2 text-sm font-medium rounded-x1 transition
+            ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 text-white hover:bg-blue-700"
+            }`}
             >
                {loading ? "Submitting..." : "Submit Lead"}
             </button>
 
             {submitted && (
-                <p className="text-green-600">Lead submitted successfully!</p>
+                <motion.p 
+                  className="text-green-600 text-sm mt-2"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  Lead submitted successfully!
+                </motion.p>
             )}
-        </form>
+        </motion.form>
     );
 }
