@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { db } from "lib/firebase";
-import { collection, addDoc, Timestamp } from "firebase/firestore";
+// import { db } from "lib/firebase";
+// import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { motion } from "framer-motion";
 import { auth, addLead } from "lib/firebase";
 
