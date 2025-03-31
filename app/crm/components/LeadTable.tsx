@@ -2,9 +2,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { collection, onSnapshot, query, where, orderBy } from "firebase/firestore";
+import { collection, onSnapshot, query, where, orderBy, updateDoc, doc } from "firebase/firestore";
 import { auth, db } from "lib/firebase";
 import { format } from "date-fns";
+import LeadForm from "./LeadForm";
 
 interface Lead {
   id: string;
@@ -24,6 +25,8 @@ export default function LeadTable() {
     const user = auth.currentUser;
     if (!user) return;
 
+    console.log("Current user UID:", user.uid)
+
     const q = query(
       collection(db, "leads"),
       where("userId", "==", user.uid),
@@ -31,6 +34,7 @@ export default function LeadTable() {
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
+      console.log("Snapshot size:", snapshot.size);  
       const leadData = snapshot.docs.map((doc) => {
         const data = doc.data();
         return {
@@ -49,6 +53,15 @@ export default function LeadTable() {
 
     return () => unsubscribe();
   }, []);
+
+  const handleStatusChange = async (leadId: string, newStatus: string) => {
+    try {
+        const leadRef = doc(db, "leads", leadId);
+        await updateDoc(leadRef, { status: newStatus });
+    } catch (error) {
+        console.error("Error updating status:", error);
+    }
+  };
 
   return (
     <div className="mt-8">
