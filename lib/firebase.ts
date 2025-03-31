@@ -86,5 +86,21 @@ export const addShipment = async (shipmentData: any, userId: string) => {
   }
 };
 
+// Function to Add a Lead
+export const addLead = async (leadData: any, userId: string) => {
+try {
+  const newLead = {
+    ...leadData,
+    userId: userId,
+    createdAt: new Date().toISOString(),
+  };
+  const docRef = await addDoc(collection(db, "leads"), newLead);
+  console.log("Lead with ID added successfully!:", docRef.id);
+  return docRef.id;
+  } catch (error) {
+    console.error("Error adding lead:", error);
+  }
+}
+
 // Export Firebase Instances
 export { auth, googleProvider, db };
