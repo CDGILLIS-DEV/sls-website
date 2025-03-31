@@ -7,6 +7,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "lib/firebase";
 import LeadForm from "./components/LeadForm";
 import type { User } from "firebase/auth"; 
+import LeadTable from "./components/LeadTable";
 
 export default function CRMPage() {
   const [loading, setLoading] = useState(true);
@@ -45,6 +46,11 @@ export default function CRMPage() {
         <div className="bg-white shadow-xl rounded-2xl p-6 transition hover:shadow-2xl">
           <LeadForm />
         </div>
+
+        <div className="bg-white shadow-xl rounded-2xl p-6 transition hover:shadow-2xl">
+          <LeadTable />
+        </div>
+
       </div>
     </div>
   );
