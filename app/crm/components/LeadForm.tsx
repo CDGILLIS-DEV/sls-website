@@ -4,6 +4,7 @@ import { useState } from "react";
 import { db } from "lib/firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { motion } from "framer-motion";
+import { auth, addLead } from "lib/firebase";
 
 export default function LeadForm() {
     const[formData, setFormData] = useState({
@@ -26,11 +27,10 @@ export default function LeadForm() {
         setLoading(true);
 
         try {
-          await addDoc(collection(db, "leads"), {
-            ...formData,
-            status: "New",
-            createdAt: Timestamp.now(),
-          });
+          const user = auth.currentUser;
+          const userId = user?.uid || "guest"; // fallback for testing, secure later
+
+          await addLead(formData, userId);
 
           setFormData({
             companyName: "",
