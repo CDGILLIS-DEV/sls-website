@@ -36,8 +36,11 @@ const Dashboard = () => {
       return;
     }
 
-    const q = query(collection(db, "shipments"), where("userId", "==", user.uid));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
+    setLoading(true);
+
+    try {
+      const q = query(collection(db, "shipments"), where("userId", "==", user.uid));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
       const shipmentData = snapshot.docs.map((doc) => ({
         id: doc.id,
         trackingNumber: doc.data().trackingNumber || "N/A",
@@ -50,10 +53,18 @@ const Dashboard = () => {
 
       setShipments(shipmentData);
       setLoading(false);
+    },(error) => {
+      console.error("Error fetching shipment:", error);
+      toast.error("Error loading shipments. Check your permissions.");
+      setLoading(false);
     });
 
     return () => unsubscribe();
-  }, [user]);
+  } catch (error) {
+    console.error("Firestore query failed:", error);
+    setLoading(false);
+  }
+ }, [user]);
 
   // Shipment Status Data
   const shipmentStats = {
