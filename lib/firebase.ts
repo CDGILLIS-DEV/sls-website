@@ -1,8 +1,11 @@
 /* eslint-disable */
 "use client";
+import { error } from "console";
 import { initializeApp } from "firebase/app";
 import { 
   getAuth, 
+  setPersistence, 
+  browserSessionPersistence,
   GoogleAuthProvider, 
   signInWithPopup, 
   createUserWithEmailAndPassword, 
@@ -33,6 +36,14 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
+
+setPersistence(auth, browserSessionPersistence)
+  .then(() => {
+    console.log("Firebase Auth persistence set to session-based.");
+  })
+  .catch((error) => {
+    console.error("Error setting Firebase Auth persistence:", error);
+  });
 
 // Function to Sign Up a User and Send Verification Email
 export const signUpUser = async (email: string, password: string) => {
