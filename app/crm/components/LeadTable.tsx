@@ -65,7 +65,7 @@ export default function LeadTable() {
 
   return (
     <div className="mt-8">
-      <h2 className="text-xl font-semibold text-gray-800 mb-4">My Leads</h2>
+      <h2 className="text-xl font-semibold text-green-800 mb-4">My Leads</h2>
       <div className="overflow-x-auto rounded-xl shadow-md bg-white">
         <table className="min-w-full text-sm text-left text-gray-700">
           <thead className="bg-gray-100 text-xs uppercase text-gray-500">

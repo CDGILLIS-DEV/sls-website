@@ -38,7 +38,7 @@ export default function CRMPage() {
   return (
     <div className="min-h-screen bg-[#F9FAFB] p-8">
       <div className="max-w-5xl mx-auto space-y-6">
-        <h1 className="text-3xl font-semibold text-gray-800">Simpatico Logistics Services CRM</h1>
+        <h1 className="text-3xl font-semibold text-green-800">Simpatico Logistics Services CRM</h1>
         <p className="text-gray-500 text-sm">
           Track manufacturers you generate and manage shipment opportunities.
         </p>
