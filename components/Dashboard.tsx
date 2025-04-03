@@ -94,12 +94,12 @@ const Dashboard = () => {
 
         {/* Row 1: Welcome & Financial Summary */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <motion.div className="bg-white p-6 rounded-lg shadow-md">
+          <motion.div className="bg-white p-6 rounded-lg hover:shadow-2xl">
             <h2 className="text-xl font-bold">Welcome, {user?.displayName || "User"}!</h2>
             <p className="text-gray-600">Your dashboard overview.</p>
           </motion.div>
 
-          <motion.div className="bg-white p-6 rounded-lg shadow-md">
+          <motion.div className="bg-white p-6 rounded-lg hover:shadow-2xl">
             <h3 className="text-lg font-semibold">Financial Summary</h3>
             <p className="text-gray-600">
               Total Paid: <span className="text-green-600 font-bold">${balances.paid.toFixed(2)}</span>
@@ -111,7 +111,7 @@ const Dashboard = () => {
         </div>
 
         {/* Row 2: Shipment Booking */}
-        <motion.div className="bg-white p-6 rounded-lg shadow-md my-6">
+        <motion.div className="bg-white p-6 rounded-lg hover:shadow-2xl my-6">
           <h3 className="text-lg font-semibold mb-4">Book a Shipment</h3>
           <form>
             <div className="mb-4">
@@ -135,7 +135,7 @@ const Dashboard = () => {
         {/* Row 3: Shipment Status & Pie Chart */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           {/* Shipment Status Card */}
-          <motion.div className="bg-white p-6 rounded-lg shadow-md">
+          <motion.div className="bg-white p-6 rounded-lg hover:shadow-2xl">
             <h3 className="text-lg font-semibold mb-4">Shipment Status Overview</h3>
             <p className="text-md flex items-center">
               <span className="text-3xl font-bold text-yellow-500">{shipmentStats.pending}</span>
@@ -156,14 +156,14 @@ const Dashboard = () => {
           </motion.div>
 
           {/* Pie Chart */}
-          <motion.div className="bg-white p-6 rounded-lg shadow-md">
+          <motion.div className="bg-white p-6 rounded-lg hover:shadow-2xl">
             <h3 className="text-lg font-semibold mb-4">Shipment Status Breakdown</h3>
             {loading ? <p>Loading chart...</p> : <Pie data={shipmentChartData} />}
           </motion.div>
         </div>
 
         {/* Row 4: Active Shipments */}
-        <motion.div className="bg-white p-6 rounded-lg shadow-md mt-6">
+        <motion.div className="bg-white p-6 rounded-lg hover:shadow-2xl mt-6">
           <h3 className="text-lg font-semibold mb-4">Active Shipments</h3>
           {loading ? (
             <p>Loading shipments...</p>
@@ -172,7 +172,7 @@ const Dashboard = () => {
           ) : (
             <ul className="space-y-4">
               {shipments.map((shipment) => (
-                <li key={shipment.id} className="p-4 border rounded-lg shadow-sm">
+                <li key={shipment.id} className="p-4 border rounded-lg hover:shadow-2xl">
                   <p className="text-sm text-gray-500">Tracking: {shipment.trackingNumber}</p>
                   <p className="text-md font-semibold">Status: {shipment.status}</p>
                   <p className="text-md">From: {shipment.origin}</p>

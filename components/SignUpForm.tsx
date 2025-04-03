@@ -73,7 +73,7 @@ export default function SignUpForm() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+      <div className="bg-white p-8 rounded-lg hover:shadow-2xl w-full max-w-md">
         <h2 className="text-2xl font-semibold text-center mb-4">Sign Up</h2>
 
         {message && <p className="text-green-500 text-sm text-center">{message}</p>}
