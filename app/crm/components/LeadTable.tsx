@@ -6,6 +6,7 @@ import { collection, onSnapshot, query, where, orderBy, updateDoc, doc } from "f
 import { auth, db } from "lib/firebase";
 import { format } from "date-fns";
 import LeadForm from "./LeadForm";
+import toast from "react-hot-toast";
 
 interface Lead {
   id: string;
@@ -17,6 +18,7 @@ interface Lead {
   status: string;
   createdAt: string;
 }
+
 
 export default function LeadTable() {
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -56,10 +58,12 @@ export default function LeadTable() {
 
   const handleStatusChange = async (leadId: string, newStatus: string) => {
     try {
-        const leadRef = doc(db, "leads", leadId);
-        await updateDoc(leadRef, { status: newStatus });
+      const leadRef = doc(db, "leads", leadId);
+      await updateDoc(leadRef, { status: newStatus });
+      toast.success("Lead status updated!");
     } catch (error) {
-        console.error("Error updating status:", error);
+        console.error("Error updating lead status:", error);
+        toast.error("Failed to update lead status.");
     }
   };
 
@@ -86,9 +90,17 @@ export default function LeadTable() {
                 <td className="px-6 py-3">{lead.email}</td>
                 <td className="px-6 py-3">{lead.productType}</td>
                 <td className="px-6 py-3">
-                  <span className="inline-block rounded-full bg-blue-100 text-blue-600 px-3 py-1 text-xs font-medium">
-                    {lead.status}
-                  </span>
+                  <select
+                    value={lead.status}
+                    onChange={(e) => handleStatusChange(lead.id, e.target.value)}
+                    className="border p-2 rounded"
+                    >
+                      <option value="New">New</option>
+                      <option value="Contacted">Contacted</option>  
+                      <option value="Qualified">Qualified</option>  
+                      <option value="Closed-Won">Closed-Won</option>  
+                      <option value="Closed-Lost">Closed-Lost</option>    
+                  </select>
                 </td>
                 <td className="px-6 py-3">{lead.createdAt}</td>
               </tr>
