@@ -191,8 +191,8 @@ export default function LeadTable() {
                     >
                       <option value="New">New</option>
                       <option value="In Progress">In Progress</option>   
-                      <option value="Closed">Closed</option>  
-                      <option value="Lost">Lost</option> 
+                      <option value="Closed">Closed-won</option>  
+                      <option value="Lost">Closed-lost</option> 
                       <option value="Follow Up">Follow Up</option>   
                   </select>
                 </td>
@@ -220,8 +220,8 @@ export default function LeadTable() {
                     <option value="">Select Status</option>
                     <option value="New">New</option>
                     <option value="In Progress">In Progress</option>
-                    <option value="Closed">Closed</option>
-                    <option value="Lost">Lost</option>
+                    <option value="Closed">Closed-won</option>
+                    <option value="Lost">Closed-lost</option>
                     <option value="Follow Up">Follow Up</option>
                 </select>
             </div>
