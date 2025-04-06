@@ -11,6 +11,7 @@ export default function LeadForm() {
         companyName: "",
         contactName: "",
         email: "",
+        phone: "",
         productType: "",
         notes: "",
     });
@@ -36,6 +37,7 @@ export default function LeadForm() {
             companyName: "",
             contactName: "",
             email: "",
+            phone: "",
             productType: "",
             notes: "",
           });
@@ -88,6 +90,17 @@ export default function LeadForm() {
                     placeholder="Email"
                     className="w-full p-2 border rounded"
                     value={formData.email}
+                    onChange={handleChange}
+                    />
+                </div>
+
+                <div>
+                    <input
+                    type="text"
+                    name="phone"
+                    placeholder="Phone"
+                    className="w-full p-2 border rounded"
+                    value={formData.phone}
                     onChange={handleChange}
                     />
                 </div>                
