@@ -15,7 +15,10 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter', "sans-serif"]
-      }
+      },
+      boxShadow: {
+        'green-glow': '0 4px 14px rgba(34, 197, 94, 0.4)',
+      },
     },
   },
   plugins: [],

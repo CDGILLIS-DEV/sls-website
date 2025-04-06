@@ -51,7 +51,7 @@ const BookLoadForm = () => {
   }; 
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-4 bg-white hover:shadow-2xl rounded-md">
+    <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-4 bg-white hover:shadow-green-glow rounded-md">
       <h2 className="text-xl font-semibold text-center mb-4">Book a Load</h2>
 
       <input

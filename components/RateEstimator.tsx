@@ -33,7 +33,7 @@ const handleSubmit = (e: React.FormEvent) => {
 };
 
 return (
-    <div className="max-w-lg mx-auto bg-white hover:shadow-2xl p-8 rounded-md mt-10">
+    <div className="max-w-lg mx-auto bg-white hover:shadow-green-glow p-8 rounded-md mt-10">
         <h2 className="text-2xl font-semibold text-center text-primary">Rate Estimator</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">

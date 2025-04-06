@@ -159,12 +159,12 @@ const Dashboard = () => {
 
         {/* Row 1: Welcome & Financial Summary */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <motion.div className="bg-white p-6 rounded-lg hover:shadow-2xl">
+          <motion.div className="bg-white p-6 rounded-lg hover:shadow-green-glow">
             <h2 className="text-xl font-bold">Welcome, {user?.displayName || "User"}!</h2>
             <p className="text-gray-600">Your dashboard overview.</p>
           </motion.div>
 
-          <motion.div className="bg-white p-6 rounded-lg hover:shadow-2xl">
+          <motion.div className="bg-white p-6 rounded-lg hover:shadow-green-glow">
             <h3 className="text-lg font-semibold">Financial Summary</h3>
             <p className="text-gray-600">Total Paid: <span className="text-green-600 font-bold">${balances.paid.toFixed(2)}</span></p>
             <p className="text-gray-600">Total Owed: <span className="text-red-600 font-bold">${balances.owed.toFixed(2)}</span></p>
@@ -173,7 +173,7 @@ const Dashboard = () => {
 
         {/* Row 2: Shipment Status Overview & Pie Chart */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          <motion.div className="bg-white p-6 rounded-lg hover:shadow-2xl">
+          <motion.div className="bg-white p-6 rounded-lg hover:shadow-green-glow">
             <h3 className="text-lg font-semibold mb-4">Shipment Status Overview</h3>
             <p className="text-3xl font-bold text-yellow-500">{shipmentStats.pending} Pending</p>
             <p className="text-3xl font-bold text-blue-600">{shipmentStats.inTransit} In Transit</p>
@@ -181,21 +181,21 @@ const Dashboard = () => {
             <p className="text-3xl font-bold text-red-600">{shipmentStats.canceled} Canceled</p>
           </motion.div>
 
-          <motion.div className="bg-white p-6 rounded-lg hover:shadow-2xl">
+          <motion.div className="bg-white p-6 rounded-lg hover:shadow-green-glow">
             <h3 className="text-lg font-semibold mb-4">Shipment Status Breakdown</h3>
             {loading ? <p>Loading chart...</p> : <Pie data={shipmentChartData} />}
           </motion.div>
         </div>
 
         {/* Row 3: Book Shipment Form */}
-        <motion.div className="bg-white p-6 rounded-lg hover:shadow-2xl my-6">
+        <motion.div className="bg-white p-6 rounded-lg hover:shadow-green-glow my-6">
           <h3 className="text-lg font-semibold mb-4">Book a Shipment</h3>
           <form onSubmit={handleBooking} className="space-y-4">
             <div>
               <label className="block text-gray-700 font-semibold">Origin</label>
               <input
                 type="text"
-                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"
                 value={origin}
                 onChange={(e) => setOrigin(e.target.value)}
                 required
@@ -205,7 +205,7 @@ const Dashboard = () => {
               <label className="block text-gray-700 font-semibold">Destination</label>
               <input
                 type="text"
-                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
                 required
@@ -215,7 +215,7 @@ const Dashboard = () => {
               <label className="block text-gray-700 font-semibold">Weight (lbs)</label>
               <input
                 type="number"
-                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"
                 value={weight}
                 onChange={(e) => setWeight(e.target.value)}
                 required
@@ -231,7 +231,7 @@ const Dashboard = () => {
         </motion.div>
 
         {/* Row 3: Active Shipments */}
-        <motion.div className="bg-white p-6 rounded-lg hover:shadow-2xl mt-6">
+        <motion.div className="bg-white p-6 rounded-lg hover:shadow-green-glow mt-6">
           <h3 className="text-lg font-semibold mb-4">Active Shipments</h3>
           {shipments.length === 0 ? <p>No active shipments found.</p> : (
             <ul className="space-y-4">{shipments.map((shipment) => (
