@@ -43,11 +43,11 @@ export default function CRMPage() {
           Track manufacturers you generate and manage shipment opportunities.
         </p>
 
-        <div className="bg-white shadow-xl rounded-2xl p-6 transition hover:shadow-2xl">
+        <div className="bg-white shadow-xl rounded-2xl p-6 transition hover:shadow-green-glow">
           <LeadForm />
         </div>
 
-        <div className="bg-white shadow-xl rounded-2xl p-6 transition hover:shadow-2xl">
+        <div className="bg-white shadow-xl rounded-2xl p-6 transition hover:shadow-green-glow">
           <LeadTable />
         </div>
 
