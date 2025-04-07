@@ -52,7 +52,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg hover:shadow-2xl w-full max-w-md">
+      <div className="bg-white p-8 rounded-lg hover:shadow-green-glow w-full max-w-md">
         <h2 className="text-2xl font-semibold text-center mb-4">Login</h2>
 
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
@@ -64,7 +64,7 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
               placeholder="Enter your email"
               required
             />
@@ -76,7 +76,7 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
               placeholder="Enter your password"
               required
             />

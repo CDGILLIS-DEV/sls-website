@@ -2,7 +2,7 @@
 
 export default function Contact() {
   return (
-    <div className="max-w-6xl text-center px-6 rounded-lg hover:shadow-green-glow transition">
+    <div className="max-w-6xl text-center px-6 rounded-lg shadow-green-glow transition">
       <h2 className="text-4xl font-semibold text-primary mb-6 mt-6">Contact Us</h2>
       <p className="text-gray-700 text-lg mb-6">
         Have questions or need a quote? Reach out to us.
