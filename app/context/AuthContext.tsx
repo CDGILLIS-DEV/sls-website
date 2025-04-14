@@ -99,7 +99,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         role: "",
         verified: true,
       });
-      setRole("customer"); // Set role for state
+      setRole(""); // Set role for state
     }
 
     return googleUser;
