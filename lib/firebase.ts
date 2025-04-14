@@ -62,7 +62,7 @@ export const signUpUser = async (email: string, password: string) => {
 };
 
 // Save user to Firestore ONLY after email verification
-export const saveUserToFirestore = async (user: User) => {
+export const saveUserToFirestore = async (user: User, role = "") => {
   try {
     const userRef = doc(db, "users", user.uid);
     const userSnap = await getDoc(userRef);
@@ -74,7 +74,7 @@ export const saveUserToFirestore = async (user: User) => {
         email: user.email,
         displayName: user.displayName || "",
         createdAt: new Date(),
-        role: "customer", // Default role
+        role: "", 
       });
     }
   } catch (error) {

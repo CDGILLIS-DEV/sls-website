@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const userRef = doc(db, "users", currentUser.uid);
         const userSnap = await getDoc(userRef);
         if (userSnap.exists()) {
-          setRole(userSnap.data().role);
+          setRole(userSnap.data().role || "user");
         }
         setUser(currentUser);
       } else {
@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // If the user is new, save them in Firestore
       await setDoc(userRef, {
         email: googleUser.email,
-        role: "customer",
+        role: "",
         verified: true,
       });
       setRole("customer"); // Set role for state
